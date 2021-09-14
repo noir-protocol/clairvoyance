@@ -1,25 +1,19 @@
 import React from 'react';
-import Card from '@material-ui/core/Card';
-import CardContent from '@material-ui/core/CardContent';
-import CardHeader from '@material-ui/core/CardHeader';
-import {makeStyles} from '@material-ui/core/styles';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import CardHeader from '@mui/material/CardHeader';
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    padding: 7.5,
-  },
-}));
+const root = {
+  height: '2400px',
+};
 
 export default function BlockList() {
-  const classes = useStyles();
   return (
-    <div className={classes.root}>
-      <Card>
-        <CardHeader title="Blocks" />
-        <CardContent>
-          LIST...
-        </CardContent>
-      </Card>
-    </div>
+    <Card sx={root}>
+      <CardHeader title="Blocks" />
+      <CardContent>
+        LIST...
+      </CardContent>
+    </Card>
   );
 }

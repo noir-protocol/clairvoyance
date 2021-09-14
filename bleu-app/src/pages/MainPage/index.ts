@@ -1,6 +1,3 @@
-import Loadable from 'react-loadable';
+import loadable from '@loadable/component';
 
-export default Loadable({
-  loader: () => import('./MainPage'),
-  loading: () => null,
-});
+export default loadable(() => import('./MainPage'));
