@@ -10,9 +10,10 @@ import MenuIcon from '@mui/icons-material/Menu';
 import Overview from './components/Overview';
 import Typography from '@mui/material/Typography';
 
-const root = {
+const root: Readonly<any> = {
   bgcolor: '#f5f5f5',
   display: 'flex',
+  flexDirection: 'column',
   alignItems: 'center',
   width: '100%',
   height: '100vh',
@@ -45,17 +46,18 @@ const placeholder = {
   height: '218px',
 };
 
-const band = {
+const band: Readonly<any> = {
   bgcolor: 'rgb(37, 44, 52)',
   height: '268px',
   width: '100vw',
   marginTop: header.height,
   zIndex: 0,
+  position: 'absolute',
 };
 
 function MainPage() {
   return (
-    <Box sx={{...root, flexDirection: 'column'}}>
+    <Box sx={root}>
       <Box sx={main}>
         <Box sx={header}>
           <Typography variant='h5'>
@@ -85,7 +87,7 @@ function MainPage() {
           </Grid>
         </Grid>
       </Box>
-      <Box sx={{...band, position: 'absolute'}} />
+      <Box sx={band} />
     </Box>
   );
 }

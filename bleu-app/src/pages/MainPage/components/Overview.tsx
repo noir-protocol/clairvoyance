@@ -25,8 +25,9 @@ const outer1 = {
   },
 };
 
-const inner = {
+const inner: Readonly<any> = {
   display: 'flex',
+  flexDirection: 'column',
   alignItems: 'start',
   padding: 1,
 };
@@ -46,7 +47,7 @@ export default function Overview() {
       <Grid container sx={{padding: '8px 0px 8px 0px'}}>
         <Grid item lg={4} md={4} sm={6} xs={12}>
           <Box sx={outer0}>
-            <Box sx={{...inner, flexDirection: 'column'}}>
+            <Box sx={inner}>
               <Typography variant='h6' sx={label}>
                 ETHER PRICE
               </Typography>
@@ -55,7 +56,7 @@ export default function Overview() {
               </Typography>
             </Box>
             <Divider />
-            <Box sx={{...inner, flexDirection: 'column'}}>
+            <Box sx={inner}>
               <Typography variant='h6' sx={label}>
                 MARKET CAP
               </Typography>
@@ -68,7 +69,7 @@ export default function Overview() {
         </Grid>
         <Grid item lg={4} md={4} sm={6} xs={12}>
           <Box sx={outer1}>
-            <Box sx={{...inner, flexDirection: 'column'}}>
+            <Box sx={inner}>
               <Typography variant='h6' sx={label}>
                 TRANSACTIONS
               </Typography>
@@ -77,7 +78,7 @@ export default function Overview() {
               </Typography>
             </Box>
             <Divider />
-            <Box sx={{...inner, flexDirection: 'column'}}>
+            <Box sx={inner}>
               <Typography variant='h6' sx={label}>
                 DIFFICULTY
               </Typography>
@@ -90,7 +91,7 @@ export default function Overview() {
         <Grid item lg={4} md={4} sm={12} xs={12}>
           <Box sx={outer}>
             <Divider sx={{display:{sm:'block', md:'none'}, paddingTop: {xs:0, sm:1}}} />
-            <Box sx={{...inner, flexDirection: 'column'}}>
+            <Box sx={inner}>
               <Typography variant='h6' sx={label}>
                 ETHEREUM TRANSACTION HISTORY IN 14 DAYS
               </Typography>

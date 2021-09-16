@@ -28,7 +28,7 @@ const root = {
   height: '500px',
 };
 
-const header = {
+const header: Readonly<any> = {
   textAlign: 'left',
   fontSize: '1rem',
   fontWeight: 500,
@@ -44,7 +44,7 @@ export default function LatestBlocks() {
   const {t} = useTranslation('', {useSuspense: false});
   return (
     <Card sx={root}>
-      <CardHeader title={t('latest_blocks')} titleTypographyProps={{textAlign: 'left', fontSize: '1rem', fontWeight: 500}} />
+      <CardHeader title={t('latest_blocks')} titleTypographyProps={header} />
       <Divider />
       <CardContent sx={body}>
         <Box>
