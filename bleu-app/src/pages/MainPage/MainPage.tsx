@@ -2,7 +2,6 @@ import React from 'react';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
-import Hidden from '@mui/material/Hidden';
 import IconButton from '@mui/material/IconButton';
 import LatestBlocks from './components/LatestBlocks';
 import LatestTransactions from './components/LatestTransactions';
@@ -11,16 +10,14 @@ import Overview from './components/Overview';
 import Typography from '@mui/material/Typography';
 
 const root: Readonly<any> = {
-  bgcolor: '#f5f5f5',
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'center',
   width: '100%',
-  height: '100vh',
 };
 
 const main = {
-  width: '100vw',
+  width: '100%',
   maxWidth: 1400,
   zIndex: 10,
 };
@@ -39,7 +36,7 @@ const menu = {
 };
 
 const body = {
-  padding: '0px 8px 0px 8px',
+  padding: '0px 8px 100px 8px',
 };
 
 const placeholder = {
