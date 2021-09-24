@@ -6,6 +6,7 @@ import MainPage from './pages/MainPage';
 import BlocksPage from './pages/BlocksPage/BlocksPage';
 import './App.css';
 import './i18n';
+import Header from './components/Header';
 import Footer from './components/Footer';
 
 const root: Readonly<any> = {
@@ -16,20 +17,29 @@ const root: Readonly<any> = {
   justifyContent: 'space-between',
 };
 
+const main: Readonly<any> = {
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+};
+
 function App() {
   return (
     <RecoilRoot>
       <Box sx={root}>
-        <Router>
-          <Switch>
-            <Route path='/blocks'>
-              <BlocksPage />
-            </Route>
-            <Route path='/'>
-              <MainPage />
-            </Route>
-          </Switch>
-        </Router>
+        <Box sx={main}>
+          <Header />
+          <Router>
+            <Switch>
+              <Route path='/blocks'>
+                <BlocksPage />
+              </Route>
+              <Route path='/'>
+                <MainPage />
+              </Route>
+            </Switch>
+          </Router>
+        </Box>
         <Footer />
       </Box>
     </RecoilRoot>
