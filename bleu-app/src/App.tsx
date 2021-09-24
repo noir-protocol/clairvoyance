@@ -8,7 +8,7 @@ import './App.css';
 import './i18n';
 import Footer from './components/Footer';
 
-const root : Readonly<any> = {
+const root: Readonly<any> = {
   bgcolor: '#f5f5f5',
   minHeight: '100vh',
   display: 'flex',

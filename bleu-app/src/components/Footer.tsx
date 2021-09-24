@@ -23,6 +23,7 @@ const main = {
 };
 
 const body = {
+  padding: '0px 15px 0px 15px',
 };
 
 const divider = {
@@ -61,20 +62,22 @@ export default function Footer() {
     <Box sx={root}>
       <Box sx={main}>
         <Box sx={body}>
-          Powered by Turnpike<br />
-          BLEU is a set of tools to build a blockchain explorer for any protocols.
-        </Box>
-        <Divider variant='middle' light={true} sx={divider} />
-        <Box sx={copyright}>
           <Box>
-            BLEU &copy; 2021 Turnpike
+            Powered by Turnpike<br />
+            BLEU is a set of tools to build a blockchain explorer for any protocols.
           </Box>
-          <Box>
-            <a href='https://github.com/turnpike/bleu' target='_blank'>
-              <Box sx={buttonBg}>
-                <GitHub sx={button} />
-              </Box>
-            </a>
+          <Divider variant='middle' light={true} sx={divider} />
+          <Box sx={copyright}>
+            <Box>
+              BLEU &copy; 2021 Turnpike
+            </Box>
+            <Box>
+              <a href='https://github.com/turnpike/bleu' target='_blank'>
+                <Box sx={buttonBg}>
+                  <GitHub sx={button} />
+                </Box>
+              </a>
+            </Box>
           </Box>
         </Box>
       </Box>

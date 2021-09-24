@@ -1,5 +1,6 @@
 import React from 'react';
 import Box from '@mui/material/Box';
+import Divider from '@mui/material/Divider';
 import Grid from '@mui/material/Grid';
 import IconButton from '@mui/material/IconButton';
 import LatestBlocks from './components/LatestBlocks';
@@ -34,7 +35,7 @@ const header = {
 
 const menuButton = {
   color: '#333',
-  padding: '8px 16px 8px 16px',
+  padding: '8px 20px 8px 20px',
 };
 
 const menuButtonText = {
@@ -74,26 +75,34 @@ const menuItem = {
   },
 };
 
-const menuText = {
+const menuText: Readonly<any> = {
   color: '#333',
   fontSize: '0.875rem',
 };
 
-const dummy = (): Element | null => {
-  return null;
+const menuDivider = {
+  margin: '8px 0px 8px 0px',
+};
+
+const dummy = (): {x:number, y:number, width:number, height:number} => {
+  return {
+    x: 0, y: 0, width: 0, height: 0,
+  };
 };
 
 function MainPage() {
   const [menuCtx, setMenuCtx] = React.useState({
     active: '',
-    anchorEl: dummy(),
+    anchorEl: null,
     onMenu: false,
+    boundary: dummy(),
   });
   const openBlockchainMenu = (event: any) => {
     setMenuCtx({
       ...menuCtx,
       active: 'blockchain',
       anchorEl: event.currentTarget,
+      boundary: event.currentTarget.getBoundingClientRect(),
     });
   };
   const openTokensMenu = (event: any) => {
@@ -101,25 +110,35 @@ function MainPage() {
       ...menuCtx,
       active: 'tokens',
       anchorEl: event.currentTarget,
+      boundary: event.currentTarget.getBoundingClientRect(),
     });
   };
   const closeMenu = () => {
     setMenuCtx({
       active: '',
-      anchorEl: dummy(),
+      anchorEl: null,
       onMenu: false,
+      boundary: dummy(),
     });
   };
   const outMenu = (event: any) => {
-    if (menuCtx.active !== '' && !menuCtx.onMenu) {
-      const coords = menuCtx.anchorEl?.getBoundingClientRect();
-      if (coords) {
-        if (event.clientX < coords.x || event.clientX >= (coords.x + coords.width) ||
-            event.clientY < coords.y || event.clientY >= (coords.y + coords.height)) {
+    if (!menuCtx.onMenu) {
+      if (menuCtx.active !== '') {
+        const adjY = 5;
+        if (event.clientX < menuCtx.boundary.x || event.clientX >= (menuCtx.boundary.x + menuCtx.boundary.width) ||
+          event.clientY < menuCtx.boundary.y || event.clientY >= (menuCtx.boundary.y + menuCtx.boundary.height + adjY)) {
           closeMenu();
         }
+      } else {
+        closeMenu();
       }
     }
+  };
+  const outMenuPopup = () => {
+    setMenuCtx({
+      ...menuCtx,
+      onMenu: false,
+    });
   };
   const onMenu = () => {
     setMenuCtx({
@@ -136,13 +155,37 @@ function MainPage() {
             BLEU
           </Typography>
           <Box sx={{display:{xs:'none',sm:'none',md:'flex'}}}>
-            <Box sx={menuButton}><Typography sx={menuButtonText}>Home</Typography></Box>
-            <Box sx={menuButton} onMouseOver={openBlockchainMenu}><Typography sx={menuButtonText}>Blockchain &#128317;</Typography></Box>
-            <Popover open={menuCtx.active === 'blockchain'} anchorEl={menuCtx.anchorEl} onMouseMove={outMenu} onClose={closeMenu} anchorOrigin={{
+            <Box sx={menuButton}><Link href='/' underline='none' sx={menuButtonText}>Home</Link></Box>
+            <Box sx={menuButton} onMouseOver={openBlockchainMenu}><Link href='#' underline='none' sx={menuButtonText}>Blockchain &#128317;</Link></Box>
+            <Popover sx={{cursor: 'pointer'}} open={menuCtx.active === 'blockchain'} anchorEl={menuCtx.anchorEl} onMouseMove={outMenu} onClose={closeMenu} anchorOrigin={{
               vertical: 'bottom',
               horizontal: 'left',
             }}>
-              <Box sx={menu} onMouseEnter={onMenu} onMouseLeave={closeMenu}>
+              <Box sx={menu} onMouseEnter={onMenu} onMouseLeave={outMenuPopup}>
+                <Link href='/blocks' underline='none'>
+                  <Box sx={menuItem}>
+                    <Typography sx={menuText}>Transactions</Typography>
+                  </Box>
+                </Link>
+                <Link href='/blocks' underline='none'>
+                  <Box sx={menuItem}>
+                    <Typography sx={menuText}>Blocks</Typography>
+                  </Box>
+                </Link>
+                <Divider sx={menuDivider} />
+                <Link href='/blocks' underline='none'>
+                  <Box sx={menuItem}>
+                    <Typography sx={menuText}>Top Accounts</Typography>
+                  </Box>
+                </Link>
+              </Box>
+            </Popover>
+            <Box sx={menuButton} onMouseOver={openTokensMenu}><Link href='#' underline='none' sx={menuButtonText}>Tokens &#128317;</Link></Box>
+            <Popover sx={{cursor: 'pointer'}} open={menuCtx.active === 'tokens'} anchorEl={menuCtx.anchorEl} onMouseMove={outMenu} onClose={closeMenu} anchorOrigin={{
+              vertical: 'bottom',
+              horizontal: 'left',
+            }}>
+              <Box sx={menu} onMouseEnter={onMenu} onMouseLeave={outMenuPopup}>
                 <Link href='/blocks' underline='none'>
                   <Box sx={menuItem}>
                     <Typography sx={menuText}>Transactions</Typography>
@@ -160,31 +203,8 @@ function MainPage() {
                 </Link>
               </Box>
             </Popover>
-            <Box sx={menuButton} onMouseOver={openTokensMenu}><Typography sx={menuButtonText}>Tokens &#128317;</Typography></Box>
-            <Popover open={menuCtx.active === 'tokens'} anchorEl={menuCtx.anchorEl} onMouseMove={outMenu} onClose={closeMenu} anchorOrigin={{
-              vertical: 'bottom',
-              horizontal: 'left',
-            }}>
-              <Box sx={menu} onMouseEnter={onMenu} onMouseLeave={closeMenu}>
-                <Link href='/blocks' underline='none'>
-                  <Box sx={menuItem}>
-                    <Typography sx={menuText}>Transactions</Typography>
-                  </Box>
-                </Link>
-                <Link href='/blocks' underline='none'>
-                  <Box sx={menuItem}>
-                    <Typography sx={menuText}>Blocks</Typography>
-                  </Box>
-                </Link>
-                <Link href='/blocks' underline='none'>
-                  <Box sx={menuItem}>
-                    <Typography sx={menuText}>Top Accounts</Typography>
-                  </Box>
-                </Link>
-              </Box>
-            </Popover>
-            <Box sx={menuButton}><Typography sx={menuButtonText}>Resources</Typography></Box>
-            <Box sx={menuButton}><Typography sx={menuButtonText}>Misc</Typography></Box>
+            <Box sx={menuButton}><Link href='#' underline='none' sx={menuButtonText}>Resources</Link></Box>
+            <Box sx={menuButton}><Link href='#' underline='none' sx={menuButtonText}>Misc</Link></Box>
           </Box>
           <IconButton edge='start' color='inherit' aria-label='menu' sx={{display:{sm:'block', md:'none'}}}>
             <MenuIcon />
