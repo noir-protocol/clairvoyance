@@ -12,7 +12,7 @@ const root: Readonly<any> = {
   bgcolor: 'rgb(37, 44, 52)',
   color: 'white',
   width: '100%',
-  height: '300px',
+  minHeight: '300px',
 };
 
 const main = {
@@ -25,9 +25,10 @@ const body = {
   padding: '0px 15px 0px 15px',
 };
 
-const inner = {
+const inner: Readonly<any> = {
   display: 'flex',
   justifyContent: 'space-between',
+  flexWrap: 'wrap',
 };
 
 const innerItemFirst = {
@@ -52,7 +53,7 @@ const innerItemDivider = {
 
 const divider = {
   bgcolor: 'white',
-  margin: '24px 0px 16px 0px',
+  margin: '24px 0px 0px 0px',
 };
 
 const logoBox = {
@@ -70,8 +71,11 @@ const logoBoxText = {
 const copyright = {
   display: 'flex',
   justifyContent: 'space-between',
+  alignItems: 'center',
   width: '100%',
   fontSize: '0.9rem',
+  paddingTop: '12px',
+  paddingBottom: '8px',
 };
 
 const buttonBg = {
@@ -83,7 +87,7 @@ const buttonBg = {
   height: '28px',
   bgcolor: 'rgba(255, 255, 255, 0.1)',
   color: 'white',
-  '&:hover, &:active': {
+  '&:hover': {
     bgcolor: 'rgba(255, 255, 255, 0.9)',
     color: colors.primary,
   },
@@ -137,16 +141,12 @@ export default function Footer() {
           </Box>
           <Divider variant='middle' light={true} sx={divider} />
           <Box sx={copyright}>
-            <Box>
-              BLEU &copy; 2021 Turnpike
-            </Box>
-            <Box>
-              <a href='https://github.com/turnpike/bleu' target='_blank'>
-                <Box sx={buttonBg}>
-                  <GitHub sx={button} />
-                </Box>
-              </a>
-            </Box>
+            <Typography sx={{fontSize: '0.9rem'}}>BLEU &copy; 2021 Turnpike</Typography>
+            <a href='https://github.com/turnpike/bleu' target='_blank'>
+              <Box sx={buttonBg}>
+                <GitHub sx={button} />
+              </Box>
+            </a>
           </Box>
         </Box>
       </Box>

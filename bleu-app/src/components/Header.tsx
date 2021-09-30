@@ -36,6 +36,7 @@ const menuButton = {
 };
 
 const menuButtonText: Readonly<any> = {
+  color: '#666',
   fontSize: '0.9rem',
 };
 
@@ -70,10 +71,10 @@ const dummy = (): {x:number, y:number, width:number, height:number} => {
   };
 };
 
-const DownwardTriangle = () => {
+export const DownwardTriangle = () => {
   return (
     <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" width="8" height="8">
-      <polygon points="0,0 8,0 4,6" style={{fill: '#0077ce'}} />
+      <polygon points="0,0 8,0 4,6" style={{fill: '#666'}} />
     </svg>
   );
 };

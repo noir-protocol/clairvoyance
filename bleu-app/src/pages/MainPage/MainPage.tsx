@@ -6,11 +6,12 @@ import LatestTransactions from './components/LatestTransactions';
 import Overview from './components/Overview';
 
 import Paper from '@mui/material/Paper';
+import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import InputBase from '@mui/material/InputBase';
-import MenuIcon from '@mui/icons-material/Menu';
 import SearchIcon from '@mui/icons-material/Search';
 import Divider from '@mui/material/Divider';
+import {DownwardTriangle} from "../../components/Header";
 
 const root: Readonly<any> = {
   display: 'flex',
@@ -51,11 +52,9 @@ function CustomizedInputBase() {
   return (
     <Paper
       component="form"
-      sx={{ p: '2px 4px', display: 'flex', alignItems: 'center', width: 500, marginLeft: '15px' }}
+      sx={{ p: '2px 4px', display: 'flex', alignItems: 'center', width: '100%', maxWidth: 500, marginLeft: '15px', marginRight: '15px' }}
     >
-      <IconButton sx={{ p: '10px' }} aria-label="menu">
-        <MenuIcon />
-      </IconButton>
+      <Button sx={{textTransform: 'none', fontSize: '0.8rem', color: '#666'}}>All Filters&#160;&#160;<DownwardTriangle /></Button>
       <Divider sx={{ height: 28, m: 0.5 }} orientation="vertical" />
       <InputBase
         sx={{ ml: 1, flex: 1 }}
