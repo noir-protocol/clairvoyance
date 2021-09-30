@@ -35,7 +35,7 @@ const menuButton = {
   padding: '8px 20px 8px 20px',
 };
 
-const menuButtonText = {
+const menuButtonText: Readonly<any> = {
   fontSize: '0.9rem',
 };
 
@@ -68,6 +68,14 @@ const dummy = (): {x:number, y:number, width:number, height:number} => {
   return {
     x: 0, y: 0, width: 0, height: 0,
   };
+};
+
+const DownwardTriangle = () => {
+  return (
+    <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" width="8" height="8">
+      <polygon points="0,0 8,0 4,6" style={{fill: '#0077ce'}} />
+    </svg>
+  );
 };
 
 export default function Header() {
@@ -136,13 +144,13 @@ export default function Header() {
           </Typography>
           <Box sx={{display:{xs:'none',sm:'none',md:'flex'}}}>
             <Box sx={menuButton}><Link href='/' underline='none' sx={menuButtonText}>Home</Link></Box>
-            <Box sx={menuButton} onMouseOver={openBlockchainMenu}><Link href='#' underline='none' sx={menuButtonText}>Blockchain &#128317;</Link></Box>
+            <Box sx={menuButton} onMouseOver={openBlockchainMenu}><Link href='#' underline='none' sx={menuButtonText}>Blockchain <DownwardTriangle /></Link></Box>
             <Popover sx={{cursor: 'pointer'}} open={menuCtx.active === 'blockchain'} anchorEl={menuCtx.anchorEl} onMouseMove={outMenu} onClose={closeMenu} anchorOrigin={{
               vertical: 'bottom',
               horizontal: 'left',
             }}>
               <Box sx={menu} onMouseEnter={onMenu} onMouseLeave={outMenuPopup}>
-                <Link href='/blocks' underline='none'>
+                <Link href='/txs' underline='none'>
                   <Box sx={menuItem}>
                     <Typography sx={menuText}>Transactions</Typography>
                   </Box>
@@ -153,14 +161,14 @@ export default function Header() {
                   </Box>
                 </Link>
                 <Divider sx={menuDivider} />
-                <Link href='/blocks' underline='none'>
+                <Link href='/account' underline='none'>
                   <Box sx={menuItem}>
                     <Typography sx={menuText}>Top Accounts</Typography>
                   </Box>
                 </Link>
               </Box>
             </Popover>
-            <Box sx={menuButton} onMouseOver={openTokensMenu}><Link href='#' underline='none' sx={menuButtonText}>Tokens &#128317;</Link></Box>
+            <Box sx={menuButton} onMouseOver={openTokensMenu}><Link href='#' underline='none' sx={menuButtonText}>Tokens <DownwardTriangle /></Link></Box>
             <Popover sx={{cursor: 'pointer'}} open={menuCtx.active === 'tokens'} anchorEl={menuCtx.anchorEl} onMouseMove={outMenu} onClose={closeMenu} anchorOrigin={{
               vertical: 'bottom',
               horizontal: 'left',

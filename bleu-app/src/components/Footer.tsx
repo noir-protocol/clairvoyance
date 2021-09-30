@@ -1,9 +1,8 @@
 import React from 'react';
 import Box from '@mui/material/Box';
 import Divider from '@mui/material/Divider';
-import Grid from '@mui/material/Grid';
 import GitHub from '@mui/icons-material/GitHub';
-import Link from '@mui/material/Link';
+import Typography from '@mui/material/Typography';
 import * as colors from '../colors';
 
 const root: Readonly<any> = {
@@ -19,11 +18,36 @@ const root: Readonly<any> = {
 const main = {
   width: '100%',
   maxWidth: '1400px',
-  padding: '30px 0px 30px 0px',
+  paddingTop: '30px',
 };
 
 const body = {
   padding: '0px 15px 0px 15px',
+};
+
+const inner = {
+  display: 'flex',
+  justifyContent: 'space-between',
+};
+
+const innerItemFirst = {
+  maxWidth: '350px',
+};
+
+const innerItem = {
+  minWidth: '230px',
+};
+
+const innerItemLink = {
+  fontSize: '0.8rem',
+  fontWeight: 'normal',
+  paddingTop: '3px',
+  paddingBottom: '5px',
+};
+
+const innerItemDivider = {
+  bgcolor: 'white',
+  margin: '8px 0px 8px 0px',
 };
 
 const divider = {
@@ -31,10 +55,23 @@ const divider = {
   margin: '24px 0px 16px 0px',
 };
 
+const logoBox = {
+  display: 'flex',
+  alignItems: 'center',
+};
+
+const logoBoxText = {
+  fontSize: '0.8rem',
+  fontWeight: 'normal',
+  paddingTop: '14px',
+  paddingBottom: '5px',
+};
+
 const copyright = {
   display: 'flex',
   justifyContent: 'space-between',
   width: '100%',
+  fontSize: '0.9rem',
 };
 
 const buttonBg = {
@@ -57,14 +94,46 @@ const button = {
   height: '14px',
 };
 
+const Logo = () => {
+  return (
+    <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" width="30" height="30">
+      <rect x='0' y='0' width='30' height='30' style={{fill: '#555'}} />
+      <rect x='7' y='5' width='16' height='3' style={{fill: '#fefefe'}} />
+      <rect x='7' y='10' width='16' height='3' style={{fill: '#fefefe'}} />
+      <rect x='13' y='10' width='4' height='15' style={{fill: '#fefefe'}} />
+    </svg>
+  );
+};
+
 export default function Footer() {
   return (
     <Box sx={root}>
       <Box sx={main}>
         <Box sx={body}>
-          <Box>
-            Powered by Turnpike<br />
-            BLEU is a set of tools to build a blockchain explorer for any protocols.
+          <Box sx={inner}>
+            <Box sx={innerItemFirst}>
+              <Box sx={logoBox}>
+                <Logo /><Typography sx={{paddingLeft: '10px'}}>Powered by Turnpike</Typography>
+              </Box>
+              <Typography sx={logoBoxText}>BLEU is a set of tools to build a blockchain explorer for any protocols.</Typography>
+            </Box>
+            <Box sx={innerItem}>
+              <Typography>Column 1</Typography>
+              <Divider sx={innerItemDivider} />
+              <Typography sx={innerItemLink}>item 1</Typography>
+              <Typography sx={innerItemLink}>item 2</Typography>
+              <Typography sx={innerItemLink}>item 3</Typography>
+              <Typography sx={innerItemLink}>item 4</Typography>
+              <Typography sx={innerItemLink}>item 5</Typography>
+            </Box>
+            <Box sx={innerItem}>
+              <Typography>Column 2</Typography>
+              <Divider sx={innerItemDivider} />
+            </Box>
+            <Box sx={innerItem}>
+              <Typography>Column 3</Typography>
+              <Divider sx={innerItemDivider} />
+            </Box>
           </Box>
           <Divider variant='middle' light={true} sx={divider} />
           <Box sx={copyright}>

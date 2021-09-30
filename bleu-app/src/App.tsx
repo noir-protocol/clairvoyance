@@ -3,7 +3,9 @@ import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
 import {RecoilRoot} from 'recoil';
 import Box from '@mui/material/Box';
 import MainPage from './pages/MainPage';
-import BlocksPage from './pages/BlocksPage/BlocksPage';
+import AccountPage from './pages/AccountPage';
+import BlocksPage from './pages/BlocksPage';
+import TransactionDetailsPage from './pages/TransactionDetailsPage';
 import './App.css';
 import './i18n';
 import Header from './components/Header';
@@ -31,8 +33,14 @@ function App() {
           <Header />
           <Router>
             <Switch>
+              <Route path='/txs'>
+                <TransactionDetailsPage />
+              </Route>
               <Route path='/blocks'>
                 <BlocksPage />
+              </Route>
+              <Route path='/account'>
+                <AccountPage />
               </Route>
               <Route path='/'>
                 <MainPage />
