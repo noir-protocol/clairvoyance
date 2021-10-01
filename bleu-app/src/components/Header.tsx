@@ -1,11 +1,14 @@
 import React from 'react';
+import {atom, useRecoilState} from 'recoil';
 import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
 import Link from '@mui/material/Link';
 import Popover from '@mui/material/Popover';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import MenuIcon from '@mui/icons-material/Menu';
 
 const root = {
@@ -30,14 +33,17 @@ const body = {
   paddingLeft: '8px',
 };
 
-const menuButton = {
-  color: '#333',
-  padding: '8px 20px 8px 20px',
+const menuButton: Readonly<any> = {
+  color: '#666',
+  textTransform: 'none',
+  fontWeight: 'normal',
+  padding: '8px 16px 8px 20px',
+  fontSize: '0.9rem',
 };
 
-const menuButtonText: Readonly<any> = {
-  color: '#666',
-  fontSize: '0.9rem',
+const menuButtonActive = {
+  ...menuButton,
+  color: '#0077ce',
 };
 
 const menu = {
@@ -71,21 +77,16 @@ const dummy = (): {x:number, y:number, width:number, height:number} => {
   };
 };
 
-export const DownwardTriangle = () => {
-  return (
-    <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" width="8" height="8">
-      <polygon points="0,0 8,0 4,6" style={{fill: '#666'}} />
-    </svg>
-  );
-};
-
 export default function Header() {
-  const [menuCtx, setMenuCtx] = React.useState({
-    active: '',
-    anchorEl: null,
-    onMenu: false,
-    boundary: dummy(),
-  });
+  const [menuCtx, setMenuCtx] = useRecoilState(atom({
+    key: 'menuContext',
+    default: {
+      active: '',
+      anchorEl: null,
+      onMenu: false,
+      boundary: dummy(),
+    }
+  }));
   const openBlockchainMenu = (event: any) => {
     setMenuCtx({
       ...menuCtx,
@@ -140,12 +141,12 @@ export default function Header() {
     <Box sx={root}>
       <Container maxWidth={false} disableGutters={true} sx={main}>
         <Box sx={body}>
-          <Typography variant='h5'>
-            BLEU
+          <Typography variant='h5' sx={{userSelect: 'none'}}>
+            <Link href='/' color='inherit' underline='none'>BLEU</Link>
           </Typography>
           <Box sx={{display:{xs:'none',sm:'none',md:'flex'}}}>
-            <Box sx={menuButton}><Link href='/' underline='none' sx={menuButtonText}>Home</Link></Box>
-            <Box sx={menuButton} onMouseOver={openBlockchainMenu}><Link href='#' underline='none' sx={menuButtonText}>Blockchain <DownwardTriangle /></Link></Box>
+            <Button sx={menuButton} href='/'>Home</Button>
+            <Button sx={menuCtx.active ==='blockchain' ? menuButtonActive : menuButton} size='small' href='#' onMouseOver={openBlockchainMenu} endIcon={<KeyboardArrowDownIcon sx={{marginLeft: '-6px'}} />}>Blockchain</Button>
             <Popover sx={{cursor: 'pointer'}} open={menuCtx.active === 'blockchain'} anchorEl={menuCtx.anchorEl} onMouseMove={outMenu} onClose={closeMenu} anchorOrigin={{
               vertical: 'bottom',
               horizontal: 'left',
@@ -169,7 +170,7 @@ export default function Header() {
                 </Link>
               </Box>
             </Popover>
-            <Box sx={menuButton} onMouseOver={openTokensMenu}><Link href='#' underline='none' sx={menuButtonText}>Tokens <DownwardTriangle /></Link></Box>
+            <Button sx={menuCtx.active === 'tokens' ? menuButtonActive : menuButton} size='small' href='#' onMouseOver={openTokensMenu} endIcon={<KeyboardArrowDownIcon sx={{marginLeft: '-6px'}} />}>Tokens</Button>
             <Popover sx={{cursor: 'pointer'}} open={menuCtx.active === 'tokens'} anchorEl={menuCtx.anchorEl} onMouseMove={outMenu} onClose={closeMenu} anchorOrigin={{
               vertical: 'bottom',
               horizontal: 'left',
@@ -192,8 +193,8 @@ export default function Header() {
                 </Link>
               </Box>
             </Popover>
-            <Box sx={menuButton}><Link href='#' underline='none' sx={menuButtonText}>Resources</Link></Box>
-            <Box sx={menuButton}><Link href='#' underline='none' sx={menuButtonText}>Misc</Link></Box>
+            <Button sx={menuButton} href='#'>Resources</Button>
+            <Button sx={menuButton} href='#'>Misc</Button>
           </Box>
           <IconButton edge='start' color='inherit' aria-label='menu' sx={{display:{sm:'block', md:'none'}}}>
             <MenuIcon />

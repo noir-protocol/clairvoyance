@@ -7,11 +7,11 @@ import Overview from './components/Overview';
 
 import Paper from '@mui/material/Paper';
 import Button from '@mui/material/Button';
+import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import InputBase from '@mui/material/InputBase';
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import SearchIcon from '@mui/icons-material/Search';
-import Divider from '@mui/material/Divider';
-import {DownwardTriangle} from "../../components/Header";
 
 const root: Readonly<any> = {
   display: 'flex',
@@ -54,7 +54,7 @@ function CustomizedInputBase() {
       component="form"
       sx={{ p: '2px 4px', display: 'flex', alignItems: 'center', width: '100%', maxWidth: 500, marginLeft: '15px', marginRight: '15px' }}
     >
-      <Button sx={{textTransform: 'none', fontSize: '0.8rem', color: '#666'}}>All Filters&#160;&#160;<DownwardTriangle /></Button>
+      <Button sx={{textTransform: 'none', fontSize: '0.8rem', color: '#666'}} endIcon={<KeyboardArrowDownIcon />}>All Filters</Button>
       <Divider sx={{ height: 28, m: 0.5 }} orientation="vertical" />
       <InputBase
         sx={{ ml: 1, flex: 1 }}
