@@ -77,16 +77,18 @@ const dummy = (): {x:number, y:number, width:number, height:number} => {
   };
 };
 
+const menuContextState = atom({
+  key: 'menuContext',
+  default: {
+    active: '',
+    anchorEl: null,
+    onMenu: false,
+    boundary: dummy(),
+  }
+});
+
 export default function Header() {
-  const [menuCtx, setMenuCtx] = useRecoilState(atom({
-    key: 'menuContext',
-    default: {
-      active: '',
-      anchorEl: null,
-      onMenu: false,
-      boundary: dummy(),
-    }
-  }));
+  const [menuCtx, setMenuCtx] = useRecoilState(menuContextState);
   const openBlockchainMenu = (event: any) => {
     setMenuCtx({
       ...menuCtx,

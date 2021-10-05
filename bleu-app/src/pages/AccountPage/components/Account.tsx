@@ -75,11 +75,13 @@ function a11yProps(index: number) {
   };
 }
 
+let valueState = atom({
+  key: 'accountValue',
+  default: 0,
+});
+
 export default function Account() {
-  const [value, setValue] = useRecoilState(atom({
-    key: 'value',
-    default: 0,
-  }));
+  const [value, setValue] = useRecoilState(valueState);
   const handleChange = (event: any, newValue: any) => {
     setValue(newValue);
   };
