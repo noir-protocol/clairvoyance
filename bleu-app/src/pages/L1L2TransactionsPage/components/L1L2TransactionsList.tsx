@@ -1,7 +1,8 @@
 import React, {useEffect} from 'react';
-import InfoCard from '../../../components/InfoCard';
-import {timeSince} from '../../../utils/time';
+import {useRecoilState} from 'recoil';
+import {useTranslation} from 'react-i18next';
 import {
+  Box,
   Link,
   Table,
   TableBody,
@@ -12,20 +13,20 @@ import {
   TableCell,
   Typography,
 } from '@mui/material';
-import {useRecoilState, useRecoilValueLoadable} from 'recoil';
+import InfoCard from '../../../components/InfoCard';
+import {L1AddressLink, L1BlockLink, L1TransactionLink, L2TransactionLink} from '../../../components/Link';
+import {timeSince} from '../../../utils/time';
 import {options, state as _state} from './state';
-import {L2BlockLink, L1TransactionLink} from '../../../components/Link';
-import {useTranslation} from 'react-i18next';
 import {api} from '../../../utils/urlResolver';
 
-function BlockList() {
+function L1L2TransactionsList() {
   const {t} = useTranslation('', {useSuspense: false});
   const [state, setState] = useRecoilState(_state);
   const [opts, setOpts] = useRecoilState(options);
 
   const reload = (count: number, page: number) => {
     (async () => {
-      const res = await fetch(api('/tx-batch', undefined, {count: count, page: page}));
+      const res = await fetch(api('/tx/l1tol2', undefined, {count: count, page: page}));
       const json = await res.json();
       setState(json);
     })();
@@ -53,19 +54,21 @@ function BlockList() {
   }, []);
 
   return (
-    <InfoCard title='Tx Batches' sx={{height:''}}>
+    <InfoCard title='L1→L2 Transactions' sx={{height:''}}>
       <Table size='small'>
         <TableHead sx={{bgcolor:'background.default'}}>
           <TableRow>
-            <TableCell>{t('Tx Batch')}</TableCell>
+            <TableCell>{t('Block Number')}</TableCell>
+            <TableCell>{t('Queue Index')}</TableCell>
+            <TableCell>{t('L2 Tx Hash')}</TableCell>
             <TableCell>
               <Link sx={{fontWeight:'inherit'}} component='button' underline='none' onClick={toggleTimestamp}>
                 {opts.datetime ? t('Date Time (UTC)') : t('Age')}
               </Link>
             </TableCell>
-            <TableCell>{t('Batch Size')}</TableCell>
             <TableCell>{t('L1 Tx Hash')}</TableCell>
-            <TableCell>{t('Prev Total Elements')}</TableCell>
+            <TableCell>{t('L1 Tx Origin')}</TableCell>
+            <TableCell>{t('Gas Limit')}</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -73,17 +76,33 @@ function BlockList() {
             state.records
             ? state.records.map((row, index) => (
               <TableRow key={index}>
-                <TableCell><L2BlockLink blockNumber={row.batch_index} /></TableCell>
+                <TableCell>
+                  <L1BlockLink blockNumber={row.l1_block_number} />
+                </TableCell>
+                <TableCell>
+                  {row.queue_index}
+                </TableCell>
+                <TableCell>
+                  <Box sx={{display:'flex',minWidth:'150px'}}>
+                    <L2TransactionLink sx={{width:0,flexGrow:1,flexBasis:0}} hash={row.l2_tx_hash} />
+                  </Box>
+                </TableCell>
                 <TableCell>
                   <Typography noWrap={true}>
-                    {opts.datetime ? new Date(+row.batch_timestamp * 1000).toLocaleString() : timeSince(row.batch_timestamp)}
+                    {opts.datetime ? new Date(+row.timestamp * 1000).toLocaleString() : timeSince(row.timestamp)}
                   </Typography>
                 </TableCell>
-                <TableCell>{row.batch_size}</TableCell>
                 <TableCell>
-                  <L1TransactionLink hash={row.l1_tx_hash} />
+                  <Box sx={{display:'flex',minWidth:'150px'}}>
+                    <L1TransactionLink sx={{width:0,flexGrow:1,flexBasis:0}} hash={row.l1_tx_hash} />
+                  </Box>
                 </TableCell>
-                <TableCell>{row.previous_total_elements}</TableCell>
+                <TableCell>
+                  <Box sx={{display:'flex',minWidth:'150px'}}>
+                    <L1AddressLink sx={{width:0,flexGrow:1,flexBasis:0}} address={row.l1_tx_origin} />
+                  </Box>
+                </TableCell>
+                <TableCell>{Number(row.gas_limit).toLocaleString()}</TableCell>
               </TableRow>
             ))
             : null
@@ -95,7 +114,7 @@ function BlockList() {
               state.page_info
               ? <TablePagination
                 rowsPerPageOptions={[10, 25, 50, 100]}
-                colSpan={5}
+                colSpan={9}
                 count={state.page_info.total_count}
                 rowsPerPage={opts.numRows}
                 page={state.page_info.page-1}
@@ -120,4 +139,4 @@ function BlockList() {
   );
 }
 
-export default BlockList;
+export default L1L2TransactionsList;

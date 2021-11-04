@@ -2,15 +2,16 @@ import React, {useEffect} from 'react';
 import {useParams} from 'react-router-dom';
 import PropTypes from 'prop-types';
 import {useRecoilState} from 'recoil';
-import InfoCard from '../../../components/InfoCard';
 import {
   Box,
+  Divider,
   Tab,
   Tabs,
+  Typography,
 } from '@mui/material';
-import {options} from './state';
+import InfoCard from '../../../components/InfoCard';
 import Overview from './Overview';
-import Logs from './Logs';
+import {options} from './state';
 
 const cardHeaderC1: Readonly<any> = {
   borderBottom: 1,
@@ -24,10 +25,10 @@ function TabPanel(props: any) {
     <Box
       role='tabpanel'
       hidden={value !== index}
-      id={`transaction-details-tabpanel-${index}`}
-      aria-labelledby={`transaction-details-tab-${index}`}
+      id={`block-details-tabpanel-${index}`}
+      aria-labelledby={`block-details-tab-${index}`}
       {...other}
-      sx={{px:'12px'}}
+      sx={{px:'12px', pb:'12px'}}
     >
       {value === index && (
         <React.Fragment>
@@ -46,21 +47,43 @@ TabPanel.propTypes = {
 
 function a11yProps(index: number) {
   return {
-    id: `transaction-details-tab-${index}`,
-    'aria-controls': `transaction-details-tabpanel-${index}`,
+    id: `block-details-tab-${index}`,
+    'aria-controls': `block-details-tabpanel-${index}`,
   };
 }
 
-function TransactionDetails(props: any) {
-  const {txHash}: any = useParams();
+const header: Readonly<any> = {
+  display: 'flex',
+  px: '16px',
+  py: '12px',
+  gap: '8px',
+  flexShrink: 0,
+};
+
+function Header(props: any) {
+  return (
+    <React.Fragment>
+      <Box sx={header}>
+        <Typography variant='h6'>{props.title}</Typography>
+        <Typography variant='h6' color='text.secondary' sx={{fontWeight:'normal'}}>#{props.blockNumber}</Typography>
+      </Box>
+      <Divider />
+    </React.Fragment>
+  );
+}
+
+function BlockDetails(props: any) {
+  const {blockNumber}: any = useParams();
   const [opts, setOpts] = useRecoilState(options);
 
   useEffect(() => {
-    setOpts({
-      ...opts,
-      txHash: txHash,
-    });
-  }, []);
+    if (opts.blockNumber !== blockNumber) {
+      setOpts({
+        ...opts,
+        blockNumber: blockNumber,
+      });
+    }
+  });
 
   const handleChange = (event: any, newValue: any) => {
     setOpts({
@@ -70,22 +93,17 @@ function TransactionDetails(props: any) {
   };
 
   return (
-    <InfoCard title='Transaction Details' contentProps={{m:0}}>
+    <InfoCard head={<Header title='Transaction Batches' blockNumber={blockNumber} />} contentProps={{m:0}}>
       <Box sx={cardHeaderC1}>
-        <Tabs value={opts.index} onChange={handleChange} aria-label='transaction-details-tabs'>
+        <Tabs value={opts.index} onChange={handleChange} aria-label='block-details-tabs'>
           <Tab label='Overview' {...a11yProps(0)} />
-          <Tab label='Logs' {...a11yProps(1)} />
-          <Tab label='Comments' {...a11yProps(2)} />
         </Tabs>
       </Box>
       <TabPanel value={opts.index} index={0}>
         <Overview />
       </TabPanel>
-      <TabPanel value={opts.index} index={1}>
-        <Logs />
-      </TabPanel>
     </InfoCard>
   );
 }
 
-export default TransactionDetails;
+export default BlockDetails;

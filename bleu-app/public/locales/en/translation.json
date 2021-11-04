@@ -1,0 +1,18 @@
+{
+  "Latest L1 Batches": "Latest L1 Batches",
+  "Latest Transactions": "Latest Transactions",
+  "Latest L1→L2 Transactions": "Latest L1→L2 Transactions",
+  "View all Transaction batches": "View all Transaction batches",
+  "View all transactions": "View all transactions",
+  "View all L1→L2 transactions": "View all L1→L2 transactions",
+  "Tx Batch": "Tx Batch",
+  "Date Time (UTC)": "Date Time (UTC)",
+  "Age": "Age",
+  "Batch Size": "Batch Size",
+  "L1 Tx Hash": "L1 Tx Hash",
+  "Prev Total Elements": "Prev Total Elements",
+  "Block Number": "Block Number",
+  "Queue Index": "Queue Index",
+  "L2 Tx Hash": "L2 Tx Hash",
+  "L1→L2 Transactions": "L1→L2 Transactions"
+}

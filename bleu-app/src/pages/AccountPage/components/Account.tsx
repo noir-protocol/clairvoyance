@@ -1,29 +1,23 @@
-import React from 'react';
+import React, {useEffect} from 'react';
+import {useParams} from 'react-router-dom';
 import PropTypes from 'prop-types';
-import Box from '@mui/material/Box';
-import Card from '@mui/material/Card';
-import Grid from '@mui/material/Grid';
-import Tab from '@mui/material/Tab';
-import Tabs from '@mui/material/Tabs';
-import Typography from '@mui/material/Typography';
-import {atom, useRecoilState} from 'recoil';
-
-const data = [
-  [1, 2, 3],
-  [2, 2, 3],
-  [3, 2, 3],
-  [4, 2, 3],
-  [5, 2, 3],
-  [6, 2, 3],
-  [7, 2, 3],
-  [8, 2, 3],
-  [9, 2, 3],
-  [10, 2, 3],
-  [11, 2, 3],
-];
-
-const root = {
-};
+import {useRecoilState, useRecoilValueLoadable} from 'recoil';
+import InfoCard from '../../../components/InfoCard';
+import {
+  Box,
+  Card,
+  Grid,
+  Tab,
+  Table,
+  TableBody,
+  TableCell,
+  TableRow,
+  Tabs,
+  Typography
+} from '@mui/material';
+import {options, balance as _balance, tabIndex as _tabIndex} from './state';
+import {toEther} from '../../../utils/ethUtils';
+import Transactions from './Transactions';
 
 const cardHeader: Readonly<any> = {
   display: 'flex',
@@ -33,32 +27,27 @@ const cardHeader: Readonly<any> = {
 };
 
 const cardHeaderC1: Readonly<any> = {
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'start',
-};
-
-const tab: Readonly<any> = {
-  textTransform: 'none',
+  borderBottom: 1,
+  borderColor: 'divider',
 };
 
 function TabPanel(props: any) {
   const { children, value, index, ...other } = props;
 
   return (
-    <div
-      role="tabpanel"
+    <Box
+      role='tabpanel'
       hidden={value !== index}
-      id={`simple-tabpanel-${index}`}
-      aria-labelledby={`simple-tab-${index}`}
+      id={`account-tabpanel-${index}`}
+      aria-labelledby={`account-tab-${index}`}
       {...other}
     >
       {value === index && (
-        <Box sx={{ p: 3 }}>
-          <Typography>{children}</Typography>
-        </Box>
+        <React.Fragment>
+          {children}
+        </React.Fragment>
       )}
-    </div>
+    </Box>
   );
 }
 
@@ -70,34 +59,54 @@ TabPanel.propTypes = {
 
 function a11yProps(index: number) {
   return {
-    id: `simple-tab-${index}`,
-    'aria-controls': `simple-tabpanel-${index}`,
+    id: `account-tab-${index}`,
+    'aria-controls': `account-tabpanel-${index}`,
   };
 }
 
-let valueState = atom({
-  key: 'accountValue',
-  default: 0,
-});
+function Account(props: any) {
+  const {address}: any = useParams();
+  const [opts, setOpts] = useRecoilState(options);
+  const [tabIndex, setTabIndex] = useRecoilState(_tabIndex);
+  const balance = useRecoilValueLoadable(_balance);
 
-export default function Account() {
-  const [value, setValue] = useRecoilState(valueState);
+  useEffect(() => {
+    setOpts({
+      ...opts,
+      address: address,
+    });
+  }, []);
+
   const handleChange = (event: any, newValue: any) => {
-    setValue(newValue);
+    setTabIndex(newValue);
   };
 
   return (
     <Grid container spacing={2}>
       <Grid item lg={6} md={6} sm={12} xs={12}>
-        <Card sx={root}>
-          <Box sx={cardHeader}>
-            <Box sx={cardHeaderC1}>
-            </Box>
-          </Box>
-        </Card>
+        <InfoCard title={`Address ${address}`} sx={{height:'100%'}} contentProps={{mt:0,mb:0}}>
+          <Table>
+            <TableBody>
+              <TableRow>
+                <TableCell sx={{borderBottom:'none'}}>
+                  <Grid container>
+                    <Grid item lg={4} md={4} sm={12} xs={12}>
+                      <Typography variant='body1'>Balance:</Typography>
+                    </Grid>
+                    <Grid item lg={8} md={8} sm={12} xs={12}>
+                      {
+                        balance.state === 'hasValue' ? <Typography>{toEther(balance.contents)} Ether</Typography> : null
+                      }
+                    </Grid>
+                  </Grid>
+                </TableCell>
+              </TableRow>
+            </TableBody>
+          </Table>
+        </InfoCard>
       </Grid>
       <Grid item lg={6} md={6} sm={12} xs={12}>
-        <Card sx={root}>
+        <Card>
           <Box sx={cardHeader}>
             <Box sx={cardHeaderC1}>
             </Box>
@@ -105,21 +114,22 @@ export default function Account() {
         </Card>
       </Grid>
       <Grid item lg={12} md={12} sm={12} xs={12}>
-        <Card sx={root}>
-          <Box sx={cardHeader}>
-            <Box sx={cardHeaderC1}>
-              <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
-                <Tab sx={tab} label="Transactions" {...a11yProps(0)} />
-                <Tab sx={tab} label="Internal Txns" {...a11yProps(1)} />
-                <Tab sx={tab} label="ERC20 Token Txns" {...a11yProps(2)} />
-                <Tab sx={tab} label="Loans" {...a11yProps(3)} />
-                <Tab sx={tab} label="Analytics" {...a11yProps(4)} />
-                <Tab sx={tab} label="Comments" {...a11yProps(5)} />
-              </Tabs>
-            </Box>
+        <InfoCard head={(
+          <Box sx={cardHeaderC1}>
+            <Tabs value={tabIndex} onChange={handleChange} aria-label='account-tabs'>
+              <Tab label="Transactions" {...a11yProps(0)} />
+              <Tab label="ERC20 Token Txs" {...a11yProps(2)} />
+              <Tab label="Comments" {...a11yProps(5)} />
+            </Tabs>
           </Box>
-        </Card>
+        )}>
+          <TabPanel value={tabIndex} index={0}>
+            <Transactions address={address} />
+          </TabPanel>
+        </InfoCard>
       </Grid>
     </Grid>
   );
 }
+
+export default Account;

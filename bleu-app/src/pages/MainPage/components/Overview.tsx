@@ -1,9 +1,14 @@
 import React from 'react';
-import Box from '@mui/material/Box';
-import Card from '@mui/material/Card';
-import Divider from '@mui/material/Divider';
-import Grid from '@mui/material/Grid';
-import Typography from '@mui/material/Typography';
+import {
+  Box,
+  Card,
+  Divider,
+  Grid,
+  Typography
+} from '@mui/material';
+import {wrappedEth, summary} from './Overview/state';
+import {useRecoilState, useRecoilValueLoadable} from 'recoil';
+import {toEther} from '../../../utils/ethUtils';
 
 const outer = {
   borderRightColor: '#e0e0e0 !important',
@@ -25,80 +30,50 @@ const outer1 = {
   },
 };
 
-const inner: Readonly<any> = {
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'start',
-  padding: 1,
-};
+function TitledContent(props: any) {
+  return (
+    <Box sx={{display:'flex',flexDirection:'column',alignItems:'start',padding:1}}>
+      <Typography variant='h6' sx={{fontSize:'0.8rem', color:'rgb(135,150,170)'}}>
+        {props.title}
+      </Typography>
+      <Typography variant='h6' sx={{fontSize: '1rem', color: (props.content ? 'text.primary' : 'background.paper')}}>
+        {props.content || 'N/A'} {props.suffix}
+      </Typography>
+    </Box>
+  );
+}
 
-const label = {
-  fontSize: '0.8rem',
-  color: 'rgb(135, 150, 170)',
-};
+function Overview() {
+  const weth = useRecoilValueLoadable(wrappedEth);
+  const sum = useRecoilValueLoadable(summary);
 
-const text = {
-  fontSize: '1rem',
-};
-
-export default function Overview() {
   return (
     <Card>
       <Grid container sx={{padding: '8px 0px 8px 0px'}}>
         <Grid item lg={4} md={4} sm={6} xs={12}>
           <Box sx={outer0}>
-            <Box sx={inner}>
-              <Typography variant='h6' sx={label}>
-                ETHER PRICE
-              </Typography>
-              <Typography variant='h6' sx={text}>
-                $3,216.30 @ 0.07237 BTC
-              </Typography>
-            </Box>
+            <TitledContent title={'WRAPPED ETHER'} content={toEther(weth.contents)} suffix='ETH' />
             <Divider />
-            <Box sx={inner}>
-              <Typography variant='h6' sx={label}>
-                MARKET CAP
-              </Typography>
-              <Typography variant='h6' sx={text}>
-                $ 377,808,831,449.00
-              </Typography>
-            </Box>
+            <TitledContent title={'TRANSACTIONS'} content={sum.contents.tx_count} suffix='TXs' />
             <Divider sx={{display:{xs:'block', sm:'none'}}} />
           </Box>
         </Grid>
         <Grid item lg={4} md={4} sm={6} xs={12}>
           <Box sx={outer1}>
-            <Box sx={inner}>
-              <Typography variant='h6' sx={label}>
-                TRANSACTIONS
-              </Typography>
-              <Typography variant='h6' sx={text}>
-                1,281.53 M
-              </Typography>
-            </Box>
+            <TitledContent title={'LATEST TRANSACTION BATCH INDEX'} content={sum.contents.latest_tx_batch_index} />
             <Divider />
-            <Box sx={inner}>
-              <Typography variant='h6' sx={label}>
-                DIFFICULTY
-              </Typography>
-              <Typography variant='h6' sx={text}>
-                9,050.48 TH
-              </Typography>
-            </Box>
+            <TitledContent title={'LATEST STATE BATCH INDEX'} content={sum.contents.latest_state_batch_index} />
           </Box>
         </Grid>
         <Grid item lg={4} md={4} sm={12} xs={12}>
           <Box sx={outer}>
             <Divider sx={{display:{sm:'block', md:'none'}, paddingTop: {xs:0, sm:1}}} />
-            <Box sx={inner}>
-              <Typography variant='h6' sx={label}>
-                ETHEREUM TRANSACTION HISTORY IN 14 DAYS
-              </Typography>
-            </Box>
+            <TitledContent title={'RESERVED AREA'} content={undefined} />
           </Box>
         </Grid>
       </Grid>
     </Card>
   );
 }
+
+export default Overview;

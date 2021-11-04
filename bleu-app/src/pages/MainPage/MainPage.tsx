@@ -1,17 +1,13 @@
 import React from 'react';
-import Box from '@mui/material/Box';
-import Grid from '@mui/material/Grid';
-import LatestBlocks from './components/LatestBlocks';
+import {
+  Box,
+  Grid,
+} from '@mui/material';
+import LatestL1Batches from './components/LatestL1Batches';
 import LatestTransactions from './components/LatestTransactions';
+import LatestL1L2Transactions from './components/LatestL1L2Transactions';
 import Overview from './components/Overview';
-
-import Paper from '@mui/material/Paper';
-import Button from '@mui/material/Button';
-import Divider from '@mui/material/Divider';
-import IconButton from '@mui/material/IconButton';
-import InputBase from '@mui/material/InputBase';
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
-import SearchIcon from '@mui/icons-material/Search';
+import SearchBar from './components/SearchBar';
 
 const root: Readonly<any> = {
   display: 'flex',
@@ -33,11 +29,9 @@ const body = {
 
 const placeholder = {
   display: 'flex',
+  justifyContent: 'center',
   alignItems: 'center',
   height: '218px',
-};
-
-const searchBar = {
 };
 
 const band: Readonly<any> = {
@@ -48,43 +42,26 @@ const band: Readonly<any> = {
   position: 'absolute',
 };
 
-function CustomizedInputBase() {
-  return (
-    <Paper
-      component="form"
-      sx={{ p: '2px 4px', display: 'flex', alignItems: 'center', width: '100%', maxWidth: 500, marginLeft: '15px', marginRight: '15px' }}
-    >
-      <Button sx={{textTransform: 'none', fontSize: '0.8rem', color: '#666'}} endIcon={<KeyboardArrowDownIcon />}>All Filters</Button>
-      <Divider sx={{ height: 28, m: 0.5 }} orientation="vertical" />
-      <InputBase
-        sx={{ ml: 1, flex: 1 }}
-        placeholder="Search ..."
-        inputProps={{ 'aria-label': 'search' }}
-      />
-      <IconButton type="submit" sx={{ p: '10px' }} aria-label="search">
-        <SearchIcon />
-      </IconButton>
-    </Paper>
-  );
-}
-
 function MainPage() {
   return (
     <Box sx={root}>
       <Box sx={band} />
       <Box sx={main}>
         <Box sx={placeholder}>
-          <CustomizedInputBase />
+          <SearchBar />
         </Box>
         <Grid container spacing={2} sx={body}>
           <Grid item lg={12} md={12} sm={12} xs={12}>
             <Overview />
           </Grid>
-          <Grid item lg={6} md={6} sm={12} xs={12}>
-            <LatestBlocks />
+          <Grid item lg={4} md={4} sm={12} xs={12}>
+            <LatestL1Batches />
           </Grid>
-          <Grid item lg={6} md={6} sm={12} xs={12}>
+          <Grid item lg={4} md={4} sm={12} xs={12}>
             <LatestTransactions />
+          </Grid>
+          <Grid item lg={4} md={4} sm={12} xs={12}>
+            <LatestL1L2Transactions />
           </Grid>
         </Grid>
       </Box>
