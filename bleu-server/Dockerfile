@@ -6,7 +6,9 @@ COPY . .
 
 RUN cargo build --release --bin bleu-server
 
-FROM rust as runtime
+FROM rust:1.56-slim as runtime
+
+RUN apt-get update && apt-get install libpq-dev -y
 
 WORKDIR bleu-server
 
