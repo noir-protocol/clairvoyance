@@ -104,6 +104,10 @@ impl OptimismBlockTxExtended {
     pub fn get_queue_index(&self) -> Option<String> {
         self.tx.queue_index.clone()
     }
+
+    pub fn is_queue_index_exist(&self) -> bool {
+        self.tx.queue_index.is_some()
+    }
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, Queryable, Apiv2Schema)]

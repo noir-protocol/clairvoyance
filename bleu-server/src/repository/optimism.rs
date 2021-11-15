@@ -110,9 +110,13 @@ pub mod tx {
             }
         }).await?;
         let conn = pool.get()?;
-        let l1_tx_hash: Option<String> = match tx_ext.is_l1_origin() {
-            true => find_by_queue_index(conn, tx_ext.get_queue_index()
-                .ok_or(ExpectedError::NoneError("queue_index is none!".to_string()))?).await?.get_tx_hash(),
+        let l1_tx_hash: Option<String> = match tx_ext.is_l1_origin() && tx_ext.is_queue_index_exist() {
+            true => {
+                match find_by_queue_index(conn, tx_ext.get_queue_index().unwrap()).await {
+                    Ok(tx_log) => tx_log.get_tx_hash(),
+                    Err(_) => None,
+                }
+            }
             false => None
         };
         Ok(OptimismBlockTxDetail::from(tx_ext, l1_tx_hash))
