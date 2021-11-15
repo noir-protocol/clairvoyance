@@ -85,6 +85,13 @@ pub struct OptimismBlockTx {
     value: Option<String>,
 }
 
+
+#[derive(Debug, Clone, Serialize, Deserialize, Queryable, Apiv2Schema)]
+pub struct OptimismBlockTxPaging {
+    tx: OptimismBlockTx,
+    gas_used: Option<String>,
+}
+
 #[derive(Debug, Clone, Serialize, Deserialize, Queryable, Apiv2Schema)]
 pub struct OptimismBlockTxExtended {
     tx: OptimismBlockTx,
@@ -94,6 +101,7 @@ pub struct OptimismBlockTxExtended {
     l1_state_root_submission_tx_hash: Option<String>,
     state: Option<String>,
     gas_used: Option<String>,
+    contract_address: Option<String>,
 }
 
 impl OptimismBlockTxExtended {
@@ -128,11 +136,11 @@ impl OptimismBlockTxDetail {
 #[derive(Debug, Clone, Serialize, Deserialize, Queryable, Apiv2Schema)]
 pub struct PaginatedOptimismBlockTx {
     page_info: PageInfo,
-    records: Vec<OptimismBlockTx>,
+    records: Vec<OptimismBlockTxPaging>,
 }
 
 impl PaginatedOptimismBlockTx {
-    pub fn new(paginated: PaginatedRecord<OptimismBlockTx>) -> Self {
+    pub fn new(paginated: PaginatedRecord<OptimismBlockTxPaging>) -> Self {
         Self {
             page_info: PageInfo::new(paginated.page, paginated.count, paginated.total_page, paginated.total_count),
             records: paginated.records,

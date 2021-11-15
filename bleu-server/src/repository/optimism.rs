@@ -60,7 +60,7 @@ pub mod tx {
 
     use crate::config::postgres::{PgConn, Pool};
     use crate::error::error::ExpectedError;
-    use crate::model::optimism::{OptimismBlockTx, OptimismBlockTxDetail, OptimismBlockTxExtended, OptimismTxSummary};
+    use crate::model::optimism::{OptimismBlockTxDetail, OptimismBlockTxExtended, OptimismBlockTxPaging, OptimismTxSummary};
     use crate::repository::ethereum::ethereum_log::find_by_queue_index;
     use crate::repository::pagination::{LoadPaginated, PaginatedRecord};
     use crate::schema::optimism::{optimism_block_txs, optimism_state_roots, optimism_tx_receipts};
@@ -101,7 +101,8 @@ pub mod tx {
                     optimism_state_roots::columns::batch_index.nullable(),
                     optimism_state_roots::columns::l1_tx_hash.nullable(),
                     optimism_tx_receipts::columns::status.nullable(),
-                    optimism_tx_receipts::columns::gas_used.nullable()
+                    optimism_tx_receipts::columns::gas_used.nullable(),
+                    optimism_tx_receipts::columns::contract_address.nullable()
                 ));
             if tx_hash.is_some() {
                 query.filter(hash.eq(tx_hash.unwrap().clone())).first::<OptimismBlockTxExtended>(&conn)
@@ -122,25 +123,34 @@ pub mod tx {
         Ok(OptimismBlockTxDetail::from(tx_ext, l1_tx_hash))
     }
 
-    pub async fn find_tx_by_tx_batch_index_page_count(pool: web::Data<Pool>, tx_batch_index: i64, page: i64, count: i64) -> Result<PaginatedRecord<OptimismBlockTx>, ExpectedError> {
+    pub async fn find_tx_by_tx_batch_index_page_count(pool: web::Data<Pool>, tx_batch_index: i64, page: i64, count: i64) -> Result<PaginatedRecord<OptimismBlockTxPaging>, ExpectedError> {
         let conn = pool.get()?;
         let paginated_tx = web::block(move || {
             optimism_block_txs::table.inner_join(optimism_txs::table.on(
                 optimism_block_txs::index.eq(optimism_txs::index).and(optimism_txs::batch_index.eq(tx_batch_index.to_string()))
-            )).order(optimism_block_txs_id.desc())
-                .select(optimism_block_txs::all_columns)
+            ))
+                .left_outer_join(optimism_tx_receipts::table.on(optimism_block_txs::columns::hash.eq(optimism_tx_receipts::columns::tx_hash)))
+                .select((
+                    optimism_block_txs::all_columns,
+                    optimism_tx_receipts::columns::gas_used.nullable()
+                ))
+                .order(optimism_block_txs_id.desc())
                 .load_with_pagination(&conn, page, count)
         }).await?;
         Ok(paginated_tx)
     }
 
-    pub async fn find_tx_by_state_batch_index_page_count(pool: web::Data<Pool>, state_batch_index: i64, page: i64, count: i64) -> Result<PaginatedRecord<OptimismBlockTx>, ExpectedError> {
+    pub async fn find_tx_by_state_batch_index_page_count(pool: web::Data<Pool>, state_batch_index: i64, page: i64, count: i64) -> Result<PaginatedRecord<OptimismBlockTxPaging>, ExpectedError> {
         let conn = pool.get()?;
         let paginated_tx = web::block(move || {
             optimism_block_txs::table.inner_join(optimism_state_roots::table.on(
                 optimism_block_txs::index.eq(optimism_state_roots::index).and(optimism_state_roots::batch_index.eq(state_batch_index.to_string()))
-            )).order(optimism_block_txs_id.desc())
-                .select(optimism_block_txs::all_columns)
+            )).left_outer_join(optimism_tx_receipts::table.on(optimism_block_txs::columns::hash.eq(optimism_tx_receipts::columns::tx_hash)))
+                .select((
+                    optimism_block_txs::all_columns,
+                    optimism_tx_receipts::columns::gas_used.nullable()
+                ))
+                .order(optimism_block_txs_id.desc())
                 .load_with_pagination(&conn, page, count)
         }).await?;
         Ok(paginated_tx)
@@ -153,20 +163,30 @@ pub mod tx {
         Ok(tx_count)
     }
 
-    pub async fn find_tx_by_address_page_count(pool: web::Data<Pool>, address: String, page: i64, count: i64) -> Result<PaginatedRecord<OptimismBlockTx>, ExpectedError> {
+    pub async fn find_tx_by_address_page_count(pool: web::Data<Pool>, address: String, page: i64, count: i64) -> Result<PaginatedRecord<OptimismBlockTxPaging>, ExpectedError> {
         let conn = pool.get()?;
         let paginated_tx = web::block(move || {
             optimism_block_txs::table.filter(from_address.eq(address.clone()).or(to_address.eq(address)))
+                .left_outer_join(optimism_tx_receipts::table.on(optimism_block_txs::columns::hash.eq(optimism_tx_receipts::columns::tx_hash)))
+                .select((
+                    optimism_block_txs::all_columns,
+                    optimism_tx_receipts::columns::gas_used.nullable()
+                ))
                 .order(optimism_block_txs_id.desc())
                 .load_with_pagination(&conn, page, count)
         }).await?;
         Ok(paginated_tx)
     }
 
-    pub async fn find_tx_by_page_count(pool: web::Data<Pool>, page: i64, count: i64) -> Result<PaginatedRecord<OptimismBlockTx>, ExpectedError> {
+    pub async fn find_tx_by_page_count(pool: web::Data<Pool>, page: i64, count: i64) -> Result<PaginatedRecord<OptimismBlockTxPaging>, ExpectedError> {
         let conn = pool.get()?;
         let paginated_tx = web::block(move || {
             optimism_block_txs::table
+                .left_outer_join(optimism_tx_receipts::table.on(optimism_block_txs::columns::hash.eq(optimism_tx_receipts::columns::tx_hash)))
+                .select((
+                    optimism_block_txs::all_columns,
+                    optimism_tx_receipts::columns::gas_used.nullable()
+                ))
                 .order(optimism_block_txs_id.desc())
                 .load_with_pagination(&conn, page, count)
         }).await?;
