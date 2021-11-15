@@ -35,12 +35,11 @@
 
     <script src="./swagger-ui/swagger-ui-bundle.js" charset="UTF-8"> </script>
     <script src="./swagger-ui/swagger-ui-standalone-preset.js" charset="UTF-8"> </script>
-    <script src="./swagger-ui/swagger-resource.js" charset="UTF-8"> </script>
     <script>
     window.onload = function() {
       // Begin Swagger UI call region
       const ui = SwaggerUIBundle({
-        url: "http://localhost:8888/api/spec",
+        url: "http://" + window.location.host + "/api/spec",
         dom_id: '#swagger-ui',
         deepLinking: true,
         presets: [
