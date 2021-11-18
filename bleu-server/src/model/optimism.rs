@@ -90,6 +90,7 @@ pub struct OptimismBlockTx {
 pub struct OptimismBlockTxPaging {
     tx: OptimismBlockTx,
     gas_used: Option<String>,
+    contract_address: Option<String>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, Queryable, Apiv2Schema)]

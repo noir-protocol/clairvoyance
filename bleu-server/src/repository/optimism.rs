@@ -132,7 +132,8 @@ pub mod tx {
                 .left_outer_join(optimism_tx_receipts::table.on(optimism_block_txs::columns::hash.eq(optimism_tx_receipts::columns::tx_hash)))
                 .select((
                     optimism_block_txs::all_columns,
-                    optimism_tx_receipts::columns::gas_used.nullable()
+                    optimism_tx_receipts::columns::gas_used.nullable(),
+                    optimism_tx_receipts::columns::contract_address.nullable()
                 ))
                 .order(optimism_block_txs_id.desc())
                 .load_with_pagination(&conn, page, count)
@@ -148,7 +149,8 @@ pub mod tx {
             )).left_outer_join(optimism_tx_receipts::table.on(optimism_block_txs::columns::hash.eq(optimism_tx_receipts::columns::tx_hash)))
                 .select((
                     optimism_block_txs::all_columns,
-                    optimism_tx_receipts::columns::gas_used.nullable()
+                    optimism_tx_receipts::columns::gas_used.nullable(),
+                    optimism_tx_receipts::columns::contract_address.nullable()
                 ))
                 .order(optimism_block_txs_id.desc())
                 .load_with_pagination(&conn, page, count)
@@ -170,7 +172,8 @@ pub mod tx {
                 .left_outer_join(optimism_tx_receipts::table.on(optimism_block_txs::columns::hash.eq(optimism_tx_receipts::columns::tx_hash)))
                 .select((
                     optimism_block_txs::all_columns,
-                    optimism_tx_receipts::columns::gas_used.nullable()
+                    optimism_tx_receipts::columns::gas_used.nullable(),
+                    optimism_tx_receipts::columns::contract_address.nullable()
                 ))
                 .order(optimism_block_txs_id.desc())
                 .load_with_pagination(&conn, page, count)
@@ -185,7 +188,8 @@ pub mod tx {
                 .left_outer_join(optimism_tx_receipts::table.on(optimism_block_txs::columns::hash.eq(optimism_tx_receipts::columns::tx_hash)))
                 .select((
                     optimism_block_txs::all_columns,
-                    optimism_tx_receipts::columns::gas_used.nullable()
+                    optimism_tx_receipts::columns::gas_used.nullable(),
+                    optimism_tx_receipts::columns::contract_address.nullable()
                 ))
                 .order(optimism_block_txs_id.desc())
                 .load_with_pagination(&conn, page, count)
