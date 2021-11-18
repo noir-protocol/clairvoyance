@@ -1,5 +1,7 @@
 FROM rust as builder
 
+RUN apt-get update && apt-get install build-essential -y
+
 WORKDIR bleu-server
 
 COPY . .
