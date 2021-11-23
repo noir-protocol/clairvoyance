@@ -63,5 +63,5 @@ docker build -t bleu-server .
 
 ### Run Docker
 ```shell
-docker run -p 8888:8888 --name bleu-server bleu-server:latest
+docker run -d -p 8888:8888 --name bleu-server bleu-server:latest
 ```
