@@ -24,6 +24,8 @@ COPY --from=builder /bleu-daemon/task ./task
 
 COPY --from=builder /bleu-daemon/target/release/bleu-daemon .
 
+ENV RUST_LOG INFO
+
 ENTRYPOINT ["./bleu-daemon", "--config-dir", "."]
 
 EXPOSE 9999
