@@ -182,5 +182,5 @@ docker build -t bleu-daemon .
 
 ### Run Docker
 ```shell
-docker run -p 9999:9999 --name bleu-daemon bleu-daemon:latest
+docker run -d -p 9999:9999 --name bleu-daemon bleu-daemon:latest
 ```
