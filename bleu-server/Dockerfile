@@ -20,6 +20,8 @@ COPY --from=builder /bleu-server/target/release/bleu-server .
 
 COPY --from=builder /bleu-server/swagger-ui ./swagger-ui
 
+ENV RUST_LOG INFO
+
 ENTRYPOINT ["./bleu-server"]
 
 EXPOSE 8888
