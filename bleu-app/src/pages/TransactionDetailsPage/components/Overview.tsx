@@ -51,7 +51,7 @@ function Overview() {
                   <Typography>Status</Typography>
                 </TableCell>
                 <TableCell>
-                  <Typography>{stateLoadable.contents.tx_ext.state ? 'Success' : 'Failed'}</Typography>
+                  <Typography>{+stateLoadable.contents.tx_ext.state ? 'Success' : 'Failed'}</Typography>
                 </TableCell>
               </TableRow>
               <TableRow>
