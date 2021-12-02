@@ -19,7 +19,7 @@ services:
     depends_on:
       - postgres
     volumes:
-      - /absolute/host/path/.env:/bleu-server/.env
+      - /absolute/host/path/.env.docker:/bleu-server/.env
   postgres:
     image: postgres
     container_name: postgres
