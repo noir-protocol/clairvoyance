@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import InfoCard from '../../../components/InfoCard';
 import {timeSince} from '../../../utils/time';
 import {api} from '../../../utils/urlResolver';
@@ -13,8 +13,9 @@ import {
   TableRow,
   Typography,
 } from '@mui/material';
-import {Loadable, selector, useRecoilValueLoadable} from 'recoil';
+import {atom, useRecoilState} from 'recoil';
 import {L2BlockLink, L1TransactionLink} from '../../../components/Link';
+import {MainPageAutoRefresh} from '../../../utils/consts';
 
 interface BatchState {
   batch_index: string;
@@ -23,13 +24,9 @@ interface BatchState {
   batch_timestamp: string;
 };
 
-const latestL1BatchesState = selector({
+const latestL1BatchesState = atom<BatchState[]>({
   key: 'LatestL1Batches',
-  get: async () => {
-    const res = await fetch(api('/tx-batch/latest'));
-    const batches = await res.json();
-    return batches;
-  },
+  default: [],
 });
 
 const tableRow: Readonly<any> = {
@@ -56,16 +53,34 @@ const content: Readonly<any> = {
 };
 
 function LatestL1Batches() {
-  const latestL1Batches: Loadable<BatchState[]> = useRecoilValueLoadable(latestL1BatchesState);
+  const [state, setState] = useRecoilState(latestL1BatchesState);
+
+  const reload = () => {
+    (async () => {
+      const res = await fetch(api('/tx-batch/latest'));
+      const json = await res.json();
+      setState(json);
+    })();
+  };
+
+  useEffect(() => {
+    reload();
+    if (MainPageAutoRefresh) {
+      const id = setInterval(reload, 60000);
+      return () => {
+        clearInterval(id);
+      };
+    }
+  }, []);
+
   return (
     <InfoCard title='Latest L1 Batches' buttonProps={{label: 'View all Transaction batches',href:'/blocks'}} sx={{height:'500px'}}>
       <Table>
         <TableBody>
           {
-            latestL1Batches.state === 'hasValue'
-            ? latestL1Batches.contents.map((row, index) => (
+            state.map((row, index) => (
               <TableRow key={index} sx={tableRow}>
-                <TableCell sx={(index === latestL1Batches.contents.length - 1) ? tableCellLast : tableCell}>
+                <TableCell sx={(index === state.length - 1) ? tableCellLast : tableCell}>
                   <Grid container spacing={1}>
                     <Grid item lg={6} md={6} sm={12} xs={12} sx={content}>
                       <Box sx={{display:'flex', alignItems:'center',gap:'12px'}}>
@@ -91,7 +106,6 @@ function LatestL1Batches() {
                 </TableCell>
               </TableRow>
             ))
-            : null
           }
         </TableBody>
       </Table>
