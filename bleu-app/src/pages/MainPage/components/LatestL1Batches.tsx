@@ -85,7 +85,7 @@ function LatestL1Batches() {
                         <Typography>Hash</Typography>
                         <L1TransactionLink sx={{width:0,flexGrow:1,flexBasis:0}} hash={row.l1_tx_hash} />
                       </Box>
-                      <Typography variant='body2'>{row.batch_size} txns</Typography>
+                      <Link variant='body2' underline='none' href={`/txs?blockNum=${row.batch_index}`}>{row.batch_size} txns</Link>
                     </Grid>
                   </Grid>
                 </TableCell>
