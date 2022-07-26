@@ -1,0 +1,122 @@
+{
+  "cosmos_block": {
+    "attributes": {
+      "hash": {
+        "type":  [ "string", "null" ],
+        "description": "block_id.hash"
+      },
+      "version": {
+        "type":  [ "string", "null" ],
+        "description": "block.header.version.block"
+      },
+      "chain_id": {
+        "type":  [ "string", "null" ],
+        "description": "block.header.chain_id"
+      },
+      "height": {
+        "type": [ "string", "null" ],
+        "description": "block.header.height"
+      },
+      "time": {
+        "type": [ "string", "null" ],
+        "description": "block.header.time"
+      },
+      "last_block_id": {
+        "type":  [ "string", "null" ],
+        "description": "block.header.last_block_id.hash"
+      },
+      "last_commit_hash": {
+        "type":  [ "string", "null" ],
+        "description": "block.header.last_commit_hash"
+      },
+      "data_hash": {
+        "type":  [ "string", "null" ],
+        "description": "block.header.data_hash"
+      },
+      "validators_hash": {
+        "type": [ "string", "null" ],
+        "description": "block.header.validators_hash"
+      },
+      "next_validators_hash": {
+        "type": [ "string", "null" ],
+        "description": "block.header.next_validators_hash"
+      },
+      "consensus_hash": {
+        "type": [ "string", "null" ],
+        "description": "block.header.consensus_hash"
+      },
+      "app_hash": {
+        "type": [ "string", "null" ],
+        "description": "block.header.app_hash"
+      },
+      "last_results_hash": {
+        "type": [ "string", "null" ],
+        "description": "block.header.last_results_hash"
+      },
+      "evidence_hash": {
+        "type": [ "string", "null" ],
+        "description": "block.header.evidence_hash"
+      },
+      "proposer_address": {
+        "type": [ "string", "null" ],
+        "description": "block.header.proposer_address"
+      },
+      "num_txs": {
+        "type": "integer",
+        "description": "num_txs"
+      }
+    },
+    "indexes": [ [ "hash" ], [ "height" ] ],
+    "uniques": [ [ "hash" ], [ "height" ] ]
+  },
+  "cosmos_tx": {
+    "attributes": {
+      "height": {
+        "type": [ "string", "null" ],
+        "description": "height"
+      },
+      "txhash": {
+        "type": [ "string", "null" ],
+        "description": "txhash"
+      },
+      "code": {
+        "type": "integer",
+        "description": "code"
+      },
+      "data": {
+        "type": [ "string", "null" ],
+        "description": "data"
+      },
+      "gas_wanted": {
+        "type": [ "string", "null" ],
+        "description": "gas_wanted"
+      },
+      "gas_used": {
+        "type": [ "string", "null" ],
+        "description": "gas_used"
+      },
+      "messages": {
+        "type": [ "object", "null" ],
+        "description": "tx.body.messages"
+      },
+      "memo": {
+        "type": [ "string", "null" ],
+        "description": "tx.body.memo"
+      },
+      "fee": {
+        "type": [ "object", "null" ],
+        "description": "tx.auth_info.fee.amount"
+      },
+      "timestamp": {
+        "type": [ "string", "null" ],
+        "description": "timestamp"
+      },
+      "raw_log": {
+        "type": [ "string", "null" ],
+        "description": "raw_log"
+      }
+    },
+    "indexes": [ [ "txhash" ], [ "height" ] ],
+    "uniques": [ [ "txhash" ] ]
+  }
+}
