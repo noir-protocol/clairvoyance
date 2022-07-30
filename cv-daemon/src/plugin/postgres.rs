@@ -15,12 +15,12 @@ use crate::libs::opt::opt_to_result;
 use crate::libs::postgres::{bulk_insert_value, create_table, insert_value};
 use crate::libs::serde::get_str;
 use crate::plugin::slack::{SlackMsg, SlackMsgLevel};
-use crate::plugin::slack::SlackPlugin;
+use crate::plugin::slack::Slack;
 use crate::types::channel::MultiSender;
 use crate::types::enumeration::Enumeration;
 use crate::types::postgres::PostgresSchema;
 
-#[appbase_plugin(SlackPlugin)]
+#[appbase_plugin(Slack)]
 pub struct Postgres {
   monitor: Option<Receiver>,
   senders: Option<MultiSender>,

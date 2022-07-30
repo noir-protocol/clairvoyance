@@ -10,17 +10,17 @@ use crate::enumeration;
 use crate::error::error::ExpectedError;
 use crate::libs::serde::get_str;
 use crate::message;
-use crate::plugin::jsonrpc::JsonRpcPlugin;
+use crate::plugin::jsonrpc::JsonRpc;
 use crate::types::channel::MultiSender;
 use crate::types::enumeration::Enumeration;
 use crate::types::sync::SyncMethod;
 
-#[appbase_plugin(JsonRpcPlugin)]
+#[appbase_plugin(JsonRpc)]
 pub struct SyncManager {
   senders: Option<MultiSender>,
 }
 
-enumeration!(SyncType; {BlockSync: "block_sync"}, {ProposalSync: "proposal_sync"}, {ValidatorSync: "validator_sync"});
+enumeration!(SyncType; {BlockSync: "block_sync"});
 message!(SyncManageMsg; {method: String});
 
 impl Plugin for SyncManager {
@@ -43,7 +43,7 @@ impl Plugin for SyncManager {
 impl SyncManager {
   fn add_methods(&self) {
     let senders = self.senders.clone().unwrap();
-    APP.run_with::<JsonRpcPlugin, _, _>(|jsonrpc| {
+    APP.run_with::<JsonRpc, _, _>(|jsonrpc| {
       jsonrpc.add_method(String::from("start_sync"), move |params: Params| {
         let response = match Self::manage_sync(SyncMethod::Start, params, &senders) {
           Ok(response) => response,
@@ -54,7 +54,7 @@ impl SyncManager {
     });
 
     let senders = self.senders.clone().unwrap();
-    APP.run_with::<JsonRpcPlugin, _, _>(|jsonrpc| {
+    APP.run_with::<JsonRpc, _, _>(|jsonrpc| {
       jsonrpc.add_method(String::from("stop_sync"), move |params: Params| {
         let response = match Self::manage_sync(SyncMethod::Stop, params, &senders) {
           Ok(response) => response,
@@ -64,7 +64,7 @@ impl SyncManager {
       });
     });
 
-    APP.run_with::<JsonRpcPlugin, _, _>(|jsonrpc| {
+    APP.run_with::<JsonRpc, _, _>(|jsonrpc| {
       jsonrpc.add_method(String::from("get_sync"), move |params: Params| {
         let response = match Self::get_sync(params) {
           Ok(response) => response,

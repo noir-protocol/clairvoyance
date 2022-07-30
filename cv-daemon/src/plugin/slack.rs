@@ -11,7 +11,7 @@ use crate::message;
 use crate::types::enumeration::Enumeration;
 
 #[appbase_plugin]
-pub struct SlackPlugin {
+pub struct Slack {
   slack_hooks: Option<SlackHooks>,
   monitor: Option<Receiver>,
 }
@@ -21,14 +21,14 @@ pub type SlackHooks = HashMap<String, String>;
 message!(SlackMsg; {msg_level: String}, {msg: String});
 enumeration!(SlackMsgLevel; {Info: "info"}, {Warn: "warn"}, {Error: "error"});
 
-impl Plugin for SlackPlugin {
+impl Plugin for Slack {
   fn new() -> Self {
     APP.options.arg(clap::Arg::new("slack::activate").long("slack-activate").takes_value(true));
     APP.options.arg(clap::Arg::new("slack::info").long("slack-info").takes_value(true));
     APP.options.arg(clap::Arg::new("slack::warn").long("slack-warn").takes_value(true));
     APP.options.arg(clap::Arg::new("slack::error").long("slack-error").takes_value(true));
 
-    SlackPlugin {
+    Slack {
       slack_hooks: None,
       monitor: None,
     }
@@ -54,7 +54,7 @@ impl Plugin for SlackPlugin {
   fn shutdown(&mut self) {}
 }
 
-impl SlackPlugin {
+impl Slack {
   fn recv(slack_hooks: SlackHooks, mut monitor: Receiver, app: QuitHandle) {
     APP.spawn(async move {
       if let Ok(msg) = monitor.try_recv() {

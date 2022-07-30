@@ -76,8 +76,6 @@ impl SyncState {
 
   pub fn next_idx(&mut self) { self.sync_idx += 1; }
 
-  pub fn update_sync_idx(&mut self, idx: u64) { self.sync_idx = idx; }
-
   pub fn status(&mut self, status: SyncStatus) { self.status = status; }
 
   pub fn get_filter(&self) -> String { self.filter.clone() }

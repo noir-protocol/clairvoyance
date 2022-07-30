@@ -7,16 +7,16 @@ use jsonrpc_core::{IoHandler, RpcMethodSimple, RpcMethodSync};
 use jsonrpc_http_server::{CloseHandle, ServerBuilder};
 
 #[appbase_plugin]
-pub struct JsonRpcPlugin {
+pub struct JsonRpc {
   io: Option<IoHandler>,
   server: Option<CloseHandle>,
 }
 
 /*
  * `add_sync_method` and `add_method` SHOULD be called during plugin initialization.
- * After JsonRpcPlugin starts, IoHandler moves into closure, so not available to access from plugin.
+ * After JsonRpc starts, IoHandler moves into closure, so not available to access from plugin.
  */
-impl JsonRpcPlugin {
+impl JsonRpc {
   #[allow(dead_code)]
   pub fn add_sync_method<F>(&mut self, name: String, func: F) where F: RpcMethodSync {
     match self.io.as_mut() {
@@ -34,11 +34,11 @@ impl JsonRpcPlugin {
   }
 }
 
-impl Plugin for JsonRpcPlugin {
+impl Plugin for JsonRpc {
   fn new() -> Self {
     APP.options.arg(Arg::new("jsonrpc::host").long("jsonrpc-host").takes_value(true));
     APP.options.arg(Arg::new("jsonrpc::port").long("jsonrpc-port").takes_value(true));
-    JsonRpcPlugin {
+    JsonRpc {
       io: None,
       server: None,
     }

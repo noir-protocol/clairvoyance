@@ -10,13 +10,13 @@ use crate::libs::serde::get_str;
 use crate::message;
 
 #[appbase_plugin]
-pub struct EmailPlugin {
+pub struct Email {
   monitor: Option<Receiver>,
 }
 
 message!(EmailMsg; {to: String}, {subject: String}, {body: String});
 
-impl Plugin for EmailPlugin {
+impl Plugin for Email {
   fn new() -> Self {
     APP.options.arg(clap::Arg::new("email::smtp-username").long("smtp-username").takes_value(true));
     APP.options.arg(clap::Arg::new("email::smtp-password").long("smtp-password").takes_value(true));
@@ -24,7 +24,7 @@ impl Plugin for EmailPlugin {
     APP.options.arg(clap::Arg::new("email::from").long("email-from").takes_value(true));
     APP.options.arg(clap::Arg::new("email::reply-to").long("email-reply-to").takes_value(true));
 
-    EmailPlugin {
+    Email {
       monitor: None,
     }
   }
@@ -42,7 +42,7 @@ impl Plugin for EmailPlugin {
   fn shutdown(&mut self) {}
 }
 
-impl EmailPlugin {
+impl Email {
   fn recv(mut monitor: Receiver, app: QuitHandle) {
     APP.spawn(async move {
       if let Ok(msg) = monitor.try_recv() {
