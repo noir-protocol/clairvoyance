@@ -22,7 +22,7 @@ info="https://hooks.slack.com/services/"
 warn="https://hooks.slack.com/services/"
 error="https://hooks.slack.com/services/"
 
-[blocksync]
+[block]
 poll-interval=1000
 
 [app]
