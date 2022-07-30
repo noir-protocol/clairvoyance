@@ -86,7 +86,7 @@ function Overview(props: any) {
                 </TableCell>
               </TableRow>
               <TableRow>
-                <TableCell colSpan={2}>
+                <TableCell colSpan={2} sx={{borderBottom: 'none'}}>
                   <Table>
                     <TableHead>
                       <TableCell align='center'>Yes</TableCell>

@@ -69,7 +69,7 @@ function TransactionDetails(props: any) {
   };
 
   return (
-    <InfoCard title='Transaction Details' contentProps={{m:0}}>
+    <InfoCard title='Transaction Details'  subtitle={`#${txHash}`} contentProps={{m: 0}}>
       <Box sx={cardHeaderC1}>
         <Tabs value={opts.index} onChange={handleChange} aria-label='transaction-details-tabs'>
           <Tab label='Overview' {...a11yProps(0)} />

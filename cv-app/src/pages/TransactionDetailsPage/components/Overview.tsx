@@ -68,7 +68,7 @@ function Overview() {
                   <Typography>Fee</Typography>
                 </TableCell>
                 <TableCell>
-                  <Typography>{stateLoadable.contents.fee.length > 0 ? `${stateLoadable.contents.fee[0]['amount']}${stateLoadable.contents.fee[0]['denom']}` : '0uatom'}</Typography>
+                  <Typography>{stateLoadable.contents.fee.length > 0 ? `${parseInt(stateLoadable.contents.fee[0]['amount']).toLocaleString()} ${stateLoadable.contents.fee[0]['denom']}` : '0 uatom'}</Typography>
                 </TableCell>
               </TableRow>
               <TableRow>
@@ -76,7 +76,7 @@ function Overview() {
                   <Typography>Gas Used</Typography>
                 </TableCell>
                 <TableCell>
-                  <Typography>{stateLoadable.contents.gas_used}</Typography>
+                  <Typography>{parseInt(stateLoadable.contents.gas_used).toLocaleString()}</Typography>
                 </TableCell>
               </TableRow>
               <TableRow>
@@ -84,7 +84,7 @@ function Overview() {
                   <Typography>Gas Used</Typography>
                 </TableCell>
                 <TableCell>
-                  <Typography>{stateLoadable.contents.gas_wanted}</Typography>
+                  <Typography>{parseInt(stateLoadable.contents.gas_wanted).toLocaleString()}</Typography>
                 </TableCell>
               </TableRow>
               <TableRow>

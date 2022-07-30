@@ -65,10 +65,10 @@ function Overview(props: any) {
                 </TableCell>
               </TableRow>
               <TableRow>
-                <TableCell>
+                <TableCell sx={{borderBottom: 'none'}}>
                   <Typography>Jailed</Typography>
                 </TableCell>
-                <TableCell>
+                <TableCell sx={{borderBottom: 'none'}}>
                   <Typography>{validator.contents.jailed.toString()}</Typography>
                 </TableCell>
               </TableRow>
