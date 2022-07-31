@@ -3,6 +3,7 @@ import {useRecoilState} from 'recoil';
 import {useTranslation} from 'react-i18next';
 import {
   Box,
+  CircularProgress,
   Table,
   TableBody,
   TableCell,
@@ -97,7 +98,8 @@ function TransactionsList(props: any) {
                     <Typography>{getTypeSummary(row.messages)}</Typography>
                   </TableCell>
                   <TableCell>
-                    <Typography>{row.code == 0 ? 'success' : 'fail'}</Typography>
+                    <Typography
+                      color={row.code == 0 ? 'success.main' : 'error.main'}>{row.code == 0 ? 'success' : 'fail'}</Typography>
                   </TableCell>
                   <TableCell>
                     <Typography>{row.fee.length > 0 ? `${parseInt(row.fee[0]['amount']).toLocaleString()} ${row.fee[0]['denom']}` : '0 uatom'}</Typography>
@@ -110,7 +112,14 @@ function TransactionsList(props: any) {
                   </TableCell>
                 </TableRow>
               ))
-              : null
+              :
+              <TableRow>
+                <TableCell align='center' colSpan={6} sx={{borderBottom: 'none'}}>
+                  <br/>
+                  <CircularProgress color='primary'/>
+                  <br/>
+                </TableCell>
+              </TableRow>
           }
         </TableBody>
         <TableFooter>

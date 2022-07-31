@@ -2,10 +2,10 @@ import React, {useEffect} from 'react';
 import InfoCard from '../../../components/InfoCard';
 import {timeSince} from '../../../utils/time';
 import {api} from '../../../utils/urlResolver';
-import {Table, TableBody, TableCell, TableHead, TableRow, Typography,} from '@mui/material';
+import {Box, Table, TableBody, TableCell, TableHead, TableRow, Typography,} from '@mui/material';
 import {atom, useRecoilState} from 'recoil';
 import {MainPageAutoRefresh} from '../../../utils/consts';
-import {BlockLink, TxsLink} from '../../../components/Link';
+import {BlockLink, TxLink, TxsLink} from '../../../components/Link';
 
 interface Block {
   cosmos_block_id: number;
@@ -95,7 +95,11 @@ function BlockSummary() {
                   <BlockLink height={row.height}/>
                 </TableCell>
                 <TableCell align='center'>
-                  <Typography>{row.proposer_address}</Typography>
+                  <Box sx={{display: 'flex', minWidth: '200px'}}>
+                    <Typography noWrap={true} sx={{width: 0, flexGrow: 1, flexBasis: 0}}>
+                      {row.proposer_address}
+                    </Typography>
+                  </Box>
                 </TableCell>
                 <TableCell align='center'>
                   {row.num_txs > 0 ? (<TxsLink height={row.height} num_txs={row.num_txs}/>) : (

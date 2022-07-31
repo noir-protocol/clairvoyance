@@ -26,7 +26,7 @@ function Overview(props: any) {
                   <Typography>Total Deposit</Typography>
                 </TableCell>
                 <TableCell>
-                  <Typography>{proposal.contents.total_deposit.length > 0 ? `${proposal.contents.total_deposit[0]['amount']} ${proposal.contents.total_deposit[0]['denom']}` : '0 uatom'}</Typography>
+                  <Typography>{proposal.contents.total_deposit.length > 0 ? `${parseInt(proposal.contents.total_deposit[0]['amount']).toLocaleString()} ${proposal.contents.total_deposit[0]['denom']}` : '0 uatom'}</Typography>
                 </TableCell>
               </TableRow>
               <TableRow>

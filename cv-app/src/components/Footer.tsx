@@ -100,11 +100,14 @@ const button = {
 
 const Logo = () => {
   return (
-    <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" width="30" height="30">
-      <rect x='0' y='0' width='30' height='30' style={{fill: '#555'}} />
-      <rect x='7' y='5' width='16' height='3' style={{fill: '#fefefe'}} />
-      <rect x='7' y='10' width='16' height='3' style={{fill: '#fefefe'}} />
-      <rect x='13' y='10' width='4' height='15' style={{fill: '#fefefe'}} />
+    <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" width="30"
+         height="30">
+      <rect x='0' y='0' width='30' height='30' style={{fill: '#444'}}/>
+      <rect x='5' y='5' width='2.5' height='20' style={{fill: '#fefefe'}}/>
+      <rect x='7.5' y='13.725' width='15' height='2.5' style={{fill: '#fefefe'}}/>
+      <polygon points='18,5 10.5,25 13,25 20.5,5' style={{fill: '#fefefe'}}/>
+      <polygon points='18,5 25.5,25 28,25 20.5,5' style={{fill: '#fefefe'}}/>
+      <rect x='13' y='22.5' width='12.5' height='2.5' style={{fill: '#fefefe'}}/>
     </svg>
   );
 };
@@ -117,13 +120,14 @@ export default function Footer() {
           <Box sx={inner}>
             <Box sx={innerItemFirst}>
               <Box sx={logoBox}>
-                <Logo /><Typography sx={{paddingLeft: '10px'}}>Powered by Haderech</Typography>
+                <Logo/><Typography sx={{paddingLeft: '10px'}}>Powered by Haderech</Typography>
               </Box>
-              <Typography sx={logoBoxText}>Clairvoyance is a set of tools to build a blockchain explorer for any protocols.</Typography>
+              <Typography sx={logoBoxText}>Clairvoyance is a set of tools to build a blockchain explorer for any
+                cosmos appchains.</Typography>
             </Box>
             <Box sx={innerItem}>
               <Typography>Column 1</Typography>
-              <Divider sx={innerItemDivider} />
+              <Divider sx={innerItemDivider}/>
               <Typography sx={innerItemLink}>item 1</Typography>
               <Typography sx={innerItemLink}>item 2</Typography>
               <Typography sx={innerItemLink}>item 3</Typography>
@@ -132,19 +136,19 @@ export default function Footer() {
             </Box>
             <Box sx={innerItem}>
               <Typography>Column 2</Typography>
-              <Divider sx={innerItemDivider} />
+              <Divider sx={innerItemDivider}/>
             </Box>
             <Box sx={innerItem}>
               <Typography>Column 3</Typography>
-              <Divider sx={innerItemDivider} />
+              <Divider sx={innerItemDivider}/>
             </Box>
           </Box>
-          <Divider variant='middle' light={true} sx={divider} />
+          <Divider variant='middle' light={true} sx={divider}/>
           <Box sx={copyright}>
             <Typography sx={{fontSize: '0.9rem'}}>Clairvoyance &copy; 2022 Haderech</Typography>
             <a href='https://github.com/turnpike/bleu' target='_blank'>
               <Box sx={buttonBg}>
-                <GitHub sx={button} />
+                <GitHub sx={button}/>
               </Box>
             </a>
           </Box>

@@ -1,6 +1,15 @@
 import React, {useEffect} from 'react';
 import InfoCard from '../../../components/InfoCard';
-import {Table, TableBody, TableCell, TableFooter, TableHead, TablePagination, TableRow,} from '@mui/material';
+import {
+  CircularProgress,
+  Table,
+  TableBody,
+  TableCell,
+  TableFooter,
+  TableHead,
+  TablePagination,
+  TableRow,
+} from '@mui/material';
 import {useRecoilState} from 'recoil';
 import {options, state as _state} from './state';
 import {useTranslation} from 'react-i18next';
@@ -64,7 +73,14 @@ function ValidatorList() {
                   <TableCell>{row.jailed.toString()}</TableCell>
                 </TableRow>
               ))
-              : null
+              :
+              <TableRow>
+                <TableCell align='center' colSpan={5} sx={{borderBottom: 'none'}}>
+                  <br/>
+                  <CircularProgress color='primary'/>
+                  <br/>
+                </TableCell>
+              </TableRow>
           }
         </TableBody>
         <TableFooter>

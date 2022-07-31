@@ -1,6 +1,7 @@
 import React, {useEffect} from 'react';
 import InfoCard from '../../../components/InfoCard';
 import {
+  CircularProgress,
   Table,
   TableBody,
   TableCell,
@@ -74,7 +75,14 @@ function BlockList() {
                   <TableCell>{timeSince(row.time)}</TableCell>
                 </TableRow>
               ))
-              : null
+              :
+              <TableRow>
+                <TableCell align='center' colSpan={5} sx={{borderBottom: 'none'}}>
+                  <br/>
+                  <CircularProgress color='primary'/>
+                  <br/>
+                </TableCell>
+              </TableRow>
           }
         </TableBody>
         <TableFooter>

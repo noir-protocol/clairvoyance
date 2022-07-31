@@ -1,6 +1,16 @@
 import React, {useEffect} from 'react';
 import InfoCard from '../../../components/InfoCard';
-import {Box, Table, TableBody, TableCell, TableFooter, TableHead, TablePagination, TableRow,} from '@mui/material';
+import {
+  Box,
+  CircularProgress,
+  Table,
+  TableBody,
+  TableCell,
+  TableFooter,
+  TableHead,
+  TablePagination,
+  TableRow,
+} from '@mui/material';
 import {useRecoilState} from 'recoil';
 import {options, state as _state} from './state';
 import {useTranslation} from 'react-i18next';
@@ -65,10 +75,17 @@ function ProposalList() {
                   <TableCell>{getSimpleStatus(row.status)}</TableCell>
                   <TableCell>{row.voting_start_time}</TableCell>
                   <TableCell>{row.submit_time}</TableCell>
-                  <TableCell>{row.total_deposit.length > 0 ? `${row.total_deposit[0]['amount']} ${row.total_deposit[0]['denom']}` : '0 uatom'}</TableCell>
+                  <TableCell>{row.total_deposit.length > 0 ? `${parseInt(row.total_deposit[0]['amount']).toLocaleString()} ${row.total_deposit[0]['denom']}` : '0 uatom'}</TableCell>
                 </TableRow>
               ))
-              : null
+              :
+              <TableRow>
+                <TableCell align='center' colSpan={6} sx={{borderBottom: 'none'}}>
+                  <br/>
+                  <CircularProgress color='primary'/>
+                  <br/>
+                </TableCell>
+              </TableRow>
           }
         </TableBody>
         <TableFooter>

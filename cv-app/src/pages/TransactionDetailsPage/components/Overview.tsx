@@ -60,7 +60,8 @@ function Overview() {
                   <Typography>Result</Typography>
                 </TableCell>
                 <TableCell>
-                  <Typography>{stateLoadable.contents.code == 0 ? 'success' : 'fail'}</Typography>
+                  <Typography
+                    color={stateLoadable.contents.code == 0 ? 'success.main' : 'error.main'}>{stateLoadable.contents.code == 0 ? 'success' : 'fail'}</Typography>
                 </TableCell>
               </TableRow>
               <TableRow>
