@@ -161,7 +161,7 @@ RUST_LOG=INFO && cargo run --package cv-daemon --bin cv-daemon -- --config-dir .
 
 ## Docker
 ### Build Docker Image
-When creating a docker image, `config.docker.toml`, `schema`, `abi`, and `task` in the project folder are used in the docker image. You can add and edit files as needed and then build the image.
+When creating a docker image, `config.docker.toml`, `schema`, and `sync` in the project folder are used in the docker image. You can add and edit files as needed and then build the image.
 
 ```shell
 docker build -t cv-daemon .
@@ -170,7 +170,7 @@ docker build -t cv-daemon .
 ### Run Docker
 ```shell
 docker run -d -p 9999:9999 \
--v /absolute/host/path/task:/cv-daemon/task \
+-v /absolute/host/path/sync:/cv-daemon/sync \
 -v /absolute/host/path/schema:/cv-daemon/schema \
 -v /absolute/host/path/config.docker.toml:/cv-daemon/config.toml \
 --name cv-daemon \
