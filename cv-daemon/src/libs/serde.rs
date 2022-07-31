@@ -39,12 +39,12 @@ pub fn find_value(values: &Map<String, Value>, target_name: &str) -> Value {
 }
 
 pub fn unwrap<'a>(params: &'a Map<String, Value>, name: &'a str) -> Result<&'a Value, ExpectedError> {
-  Ok(opt_to_result(params.get(name))?)
+  Ok(opt_to_result(params.get(name), format!("unwrap failed! {} is none!", name))?)
 }
 
 pub fn get_str<'a>(params: &'a Map<String, Value>, name: &'a str) -> Result<&'a str, ExpectedError> {
   let unwrapped = unwrap(params, name)?;
-  Ok(opt_to_result(unwrapped.as_str())?)
+  Ok(opt_to_result(unwrapped.as_str(), format!("unwrap failed! {} is none!", name))?)
 }
 
 pub fn get_string(params: &Map<String, Value>, name: &str) -> Result<String, ExpectedError> {
@@ -54,17 +54,17 @@ pub fn get_string(params: &Map<String, Value>, name: &str) -> Result<String, Exp
 
 pub fn get_u64(params: &Map<String, Value>, name: &str) -> Result<u64, ExpectedError> {
   let unwrapped = unwrap(params, name)?;
-  Ok(opt_to_result(unwrapped.as_u64())?)
+  Ok(opt_to_result(unwrapped.as_u64(), format!("get_u64 failed! {} is none!", name))?)
 }
 
 pub fn get_object<'a>(params: &'a Map<String, Value>, name: &'a str) -> Result<&'a Map<String, Value>, ExpectedError> {
   let unwrapped = unwrap(params, name)?;
-  Ok(opt_to_result(unwrapped.as_object())?)
+  Ok(opt_to_result(unwrapped.as_object(), format!("get_object failed! {} is none!", name))?)
 }
 
 pub fn get_array<'a>(params: &'a Map<String, Value>, name: &'a str) -> Result<&'a Vec<Value>, ExpectedError> {
   let unwrapped = unwrap(params, name)?;
-  Ok(opt_to_result(unwrapped.as_array())?)
+  Ok(opt_to_result(unwrapped.as_array(), format!("get_array failed! {} is none!", name))?)
 }
 
 pub fn find_value_by_path(params: &Map<String, Value>, path: &str) -> Value {
@@ -80,7 +80,7 @@ pub fn find_value_by_path(params: &Map<String, Value>, path: &str) -> Value {
         target.clone()
       } else {
         Value::Null
-      }
+      };
     } else {
       if let Ok(found) = get_object(params, split[i]) {
         params = found;
@@ -124,7 +124,7 @@ pub fn filter(values: &Map<String, Value>, filter: String) -> Result<bool, Expec
   let mut calc_stack: Vec<String> = Vec::new();
   for vec_item in calc_vec {
     if vec_item == ")" {
-      while opt_ref_to_result(calc_stack.last())? != "(" {
+      while opt_ref_to_result(calc_stack.last(), "filter failed! calc_stack is empty!".to_string())? != "(" {
         if bool_stack.len() < 2 {
           return Err(ExpectedError::InvalidError(String::from("filter format error!")));
         }
@@ -144,7 +144,7 @@ pub fn filter(values: &Map<String, Value>, filter: String) -> Result<bool, Expec
     let calc_ret = filter_calc(&mut bool_stack, &mut calc_stack)?;
     bool_stack.push(calc_ret);
   }
-  let ret = opt_to_result(bool_stack.pop())?;
+  let ret = opt_to_result(bool_stack.pop(), "filter failed! bool_stack is empty!".to_string())?;
   Ok(ret)
 }
 
@@ -168,9 +168,9 @@ fn filter_value(values: &Map<String, Value>, key_value: &String) -> Result<bool,
 }
 
 fn filter_calc(bool_stack: &mut Vec<bool>, calc_stack: &mut Vec<String>) -> Result<bool, ExpectedError> {
-  let calc_op = opt_to_result(calc_stack.pop())?;
-  let top = opt_to_result(bool_stack.pop())?;
-  let second = opt_to_result(bool_stack.pop())?;
+  let calc_op = opt_to_result(calc_stack.pop(), "filter_calc failed! calc_stack is empty!".to_string())?;
+  let top = opt_to_result(bool_stack.pop(), "filter_calc failed! bool_stack first value is empty!".to_string())?;
+  let second = opt_to_result(bool_stack.pop(), "filter_calc failed! bool_stack second value  is empty!".to_string())?;
   if calc_op == "&" {
     Ok(top & second)
   } else {

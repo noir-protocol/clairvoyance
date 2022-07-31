@@ -117,7 +117,7 @@ impl Postgres {
     for schema_file in schema_files.iter() {
       let json_str = fs::read_to_string(schema_file)?;
       let json_schema: Value = serde_json::from_str(json_str.as_str())?;
-      let raw_schema_map = opt_to_result(json_schema.as_object())?;
+      let raw_schema_map = opt_to_result(json_schema.as_object(), "json_schema is non!".to_string()) ? ;
       for (schema_name, values) in raw_schema_map {
         schema_map.insert(schema_name.clone(), PostgresSchema::from(schema_name.clone(), values)?);
       }

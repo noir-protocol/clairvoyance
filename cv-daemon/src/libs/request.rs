@@ -9,17 +9,16 @@ pub async fn get_block_async(url: &str) -> Result<Map<String, Value>, ExpectedEr
   let body = res.text().await?;
   let parsed_body: Map<String, Value> = serde_json::from_str(body.as_str())?;
   if !status.is_success() {
-    let code = get_u64(&parsed_body, "code")?;
-    let error = get_string(&parsed_body, "message");
+    let error = get_string(&parsed_body, "error");
     let error_msg = if error.is_ok() {
       error.unwrap()
     } else {
       "request error".to_string()
     };
-    if code == 3 && error_msg == "rpc error: code = InvalidArgument desc = requested block height is bigger then the chain length: invalid request" {
-      return Err(ExpectedError::BlockHeightError(error_msg));
+    return if error_msg == "requested block height is bigger then the chain length" {
+      Err(ExpectedError::BlockHeightError(error_msg))
     } else {
-      return Err(ExpectedError::RequestError(error_msg));
+      Err(ExpectedError::RequestError(error_msg))
     }
   }
   Ok(parsed_body)

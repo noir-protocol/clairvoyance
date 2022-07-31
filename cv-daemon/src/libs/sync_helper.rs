@@ -16,13 +16,13 @@ pub fn load_sync_state(sync_type: &str) -> Result<SyncState, ExpectedError> {
   let state_res = fs::read_to_string(format!("state/{}", sync_type));
   if state_res.is_ok() {
     let json_value: Value = serde_json::from_str(state_res.unwrap().as_str())?;
-    let sync_state_map = opt_to_result(json_value.as_object())?;
+    let sync_state_map = opt_to_result(json_value.as_object(), "load_sync_state failed! json_value is none!".to_string())?;
     Ok(SyncState::from(sync_state_map))
   } else {
     log::error!("{}", state_res.err().unwrap());
     let new_sync = fs::read_to_string(format!("sync/{}", sync_type))?;
     let json_value: Value = serde_json::from_str(new_sync.as_str())?;
-    let sync_state_map = opt_to_result(json_value.as_object())?;
+    let sync_state_map = opt_to_result(json_value.as_object(), "load_sync_state failed! json_value is none!".to_string())?;
     Ok(SyncState::new(sync_state_map))
   }
 }
@@ -59,8 +59,8 @@ pub fn create_req_url(node_url: String, api: String) -> String {
 
 pub fn message_handler(message: Value, sync_state: &mut SyncState) -> Result<(), ExpectedError> {
   log::debug!("message_handler; message={}, sync_id={}", message.to_string(), sync_state.sync_id);
-  let parsed_msg = opt_to_result(message.as_object())?;
-  let method = opt_to_result(SyncMethod::find(get_str(parsed_msg, "method")?))?;
+  let parsed_msg = opt_to_result(message.as_object(), "message_handler failed! message is none!".to_string())?;
+  let method = opt_to_result(SyncMethod::find(get_str(parsed_msg, "method")?), "message_handler failed! method is none!".to_string())?;
   match method {
     SyncMethod::Start => {
       sync_state.status(SyncStatus::Working);

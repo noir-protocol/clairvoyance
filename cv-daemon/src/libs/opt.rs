@@ -17,16 +17,16 @@ pub fn get_value<T>(key: &str) -> Result<T, ExpectedError>
   Ok(value_str)
 }
 
-pub fn opt_to_result<T>(option: Option<T>) -> Result<T, ExpectedError> {
+pub fn opt_to_result<T>(option: Option<T>, err_msg: String) -> Result<T, ExpectedError> {
   match option {
     Some(t) => Ok(t),
-    None => Err(ExpectedError::NoneError(String::from("value is none!")))
+    None => Err(ExpectedError::NoneError(err_msg))
   }
 }
 
-pub fn opt_ref_to_result<T>(option: Option<&T>) -> Result<&T, ExpectedError> {
+pub fn opt_ref_to_result<T>(option: Option<&T>, err_msg: String) -> Result<&T, ExpectedError> {
   match option {
     Some(t) => Ok(t),
-    None => Err(ExpectedError::NoneError(String::from("value is none!")))
+    None => Err(ExpectedError::NoneError(err_msg))
   }
 }
