@@ -1,5 +1,4 @@
 import * as consts from './consts';
-import {NodeEndpoint} from './consts';
 
 function paramsToString(params?: string | object): string {
   if (params) {
@@ -11,10 +10,6 @@ function paramsToString(params?: string | object): string {
     params = '?' + params;
   }
   return params || '';
-}
-
-export function nodeApi(path: string, key?: string, params?: string | object) {
-  return consts.NodeEndpoint + path + (key ? '/' + key : '') + paramsToString(params);
 }
 
 export function api(path: string, key?: string, params?: string | object) {

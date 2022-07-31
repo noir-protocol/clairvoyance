@@ -1,5 +1,5 @@
 # Clairvoyance Daemon
-The Clairvoyance Daemon (CV Daemon) is a tool for crawling Cosmos appchain date.
+The Clairvoyance Daemon (CV Daemon) is a tool for crawling Cosmos appchain data.
 This app consists of several task plugins to crawl data and a postgresql plugin to store data.
 The task plugin is controlled by the JSON-RPC plugin, and when there is an issue in the operation of the task, the issue can be forwarded to the admin through Slack and Email.
 The state of each task is synced to json format file, and even if the app goes down and restarts, it continues from the synced state.
