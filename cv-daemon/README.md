@@ -33,10 +33,10 @@ The task json has the form below.
 
 ### Control Task
 Loop Polling tasks are controlled via JSON-RPC.
-There are a total of 3 methods, which are `start_sync`, `stop_sync` and `get_sync`. `get_sync` is the method that can check the status of task, and the rest are methods that control the state of the task.
+There are a total of 3 methods, which are `start_sync`, `stop_sync` and `get_sync`. 
+`get_sync` is the method that can check the status of task, and the rest are methods that control the state of the task.
 `start_sync` restarts a task that is stopped or a task that is in an error state.
 `stop_sync` stops the running task.
-The above three methods to control the task state all require a task as params.
 ```json
 {
     "jsonrpc": "2.0",
@@ -68,7 +68,7 @@ The schema has schema name as the key, and has an object called `attributes` who
 An item in `attributes` consists of a type and a description.
 The types allowed in JSON Schema are `string`, `integer`, `number`, `boolean`, `object`, and `array`, and nullable is indicated as follows. ['string', 'null']
 The description means the field value in the data, and it can be viewed as a key that matches the field value to the column of the DB table.
-For example, in the `l2_tx_block` that gets the tx data of L2 geth, there is a field called ‘from’ in tx. However, when saving to DB, it is saved as `from_address`, so it has the form below.
+For example, in the `cosmos_block` that gets the block of cosmos appchain, there is a field called ‘block_id.hash’ in block. However, when saving to DB, it is saved as `hash`, so it has the form below.
 ```json
   "cosmos_block": {
     "attributes": {
