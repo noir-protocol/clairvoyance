@@ -43,7 +43,9 @@ function Overview(props: any) {
                   <Typography>Num Txs</Typography>
                 </TableCell>
                 <TableCell>
-                  <TxsLink height={block.contents.height} num_txs={block.contents.num_txs}></TxsLink>
+                  {block.contents.num_txs > 0 ?
+                    (<TxsLink height={block.contents.height} num_txs={block.contents.num_txs}/>) :
+                    (<Typography>{block.contents.num_txs}</Typography>)}
                 </TableCell>
               </TableRow>
               <TableRow>
