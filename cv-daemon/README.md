@@ -1,71 +1,59 @@
 # Clairvoyance Daemon
-The Clairvoyance Daemon (CV Daemon) is a tool for crawling Tendermint date.
-The app consists of several task plugins to crawl data and a postgresql plugin to store data.
+The Clairvoyance Daemon (CV Daemon) is a tool for crawling Cosmos appchain date.
+This app consists of several task plugins to crawl data and a postgresql plugin to store data.
 The task plugin is controlled by the JSON-RPC plugin, and when there is an issue in the operation of the task, the issue can be forwarded to the admin through Slack and Email.
-The state of each task is synced to RocksDB, and even if the app goes down and restarts, it continues from the synced state.
+The state of each task is synced to json format file, and even if the app goes down and restarts, it continues from the synced state.
 
 ## Task Plugin
 The task plugin is responsible for synchronizing data through crawling.
-There are plugins that sync data through Loop and Polling (l2_block_tx, l2_enqueue, l2_state_batch, l2_tx_batch), and 2 plugins that are triggered and operated by the previous plugin (l1_tx_log, l2_tx_receipt) exist.
+There are plugins that sync data through Loop and Polling block and transactions.
 
 ### Load Task
-At startup, each task plugin attempts to read the task state through a function called `task_loader`.
-At this time, it checks if there is synced task information in RocksDB, and if there is no saved task state information, the task json file existing in the `root/task` path is loaded to create the first task state.  
+At startup, each task plugin attempts to read the task state through a function called `load_sync_state`.
+At this time, it checks if there is synced task information in state path, and if there is no saved task state information, the task in the sync path is loaded to create the first task state.  
 The task json has the form below.
 
 ```json
 {
-  "l2_block_tx": {
-    "start_idx": 0,
-    "end_points": [
-      "http://localhost:8545"
-    ],
-    "filter": ""
-  }
+  "sync_type": "block_sync",
+  "chain_name": "cosmos",
+  "chain_id": "cosmoshub-4",
+  "from_idx": 1,
+  "endpoints": [
+    "https://cosmoshub-4--lcd--archive.datahub.figment.io/apikey/{apikey}"
+  ],
+  "endpoint_idx": 0,
+  "filter": ""
 }
+
 ```
-`start_idx` is a parameter value required when fetching data by polling method. Block Height or index values are these.
+`from_idx` is a parameter value required when fetching data by polling method. Block Height or index values are these.
 `end_point` means the end point requesting data, and multiple end points can be input as an array. When requesting polling, the request is made using the first value of the array, and if an error occurs, the request is automatically made to the next end point of the array.
-`filter` is used to filter data. "filter": in the form of "to=0xabdc&queue_origin=l1", currently provides four operators: `=`, `()`, `&`, and `|`. The meaning of the preceding filter means that only data in which 'to' is '0xabcd' and the value of 'queue_origin' is 'l1' in json data will be used and the rest will be skipped.
+`filter` is used to filter data. "filter": in the form of "proposer_address=57713BB7421C7FEB381B863FC87DED5E829AA961", currently provides four operators: `=`, `()`, `&`, and `|`. The meaning of the preceding filter means that only data in which 'proposer_address' is '57713BB7421C7FEB381B863FC87DED5E829AA961' in json data will be used and the rest will be skipped.
 
 ### Control Task
 Loop Polling tasks are controlled via JSON-RPC.
-There are a total of 4 methods, which are `star_task`, `stop_task`, `remove_task`, and `get_tasks`. `get_tasks` is a method that can check the status of the currently running task, and the rest are methods that control the state of the task.
-`start_task` restarts a task that is stopped or a task that is in an error state.
-`stop_task` stops the running task.
-`remove_task` deletes the task state on RocksDB and stops working. On restart, it is initialized according to the task json.
+There are a total of 3 methods, which are `start_sync`, `stop_sync` and `get_sync`. `get_sync` is the method that can check the status of task, and the rest are methods that control the state of the task.
+`start_sync` restarts a task that is stopped or a task that is in an error state.
+`stop_sync` stops the running task.
 The above three methods to control the task state all require a task as params.
 ```json
 {
     "jsonrpc": "2.0",
     "id": "1",
-    "method": "start_task",
+    "method": "start_sync",
     "params": {
-        "task": "l2_block_tx"
+        "sync_type": "block_sync"
     }
 }
 ```
-`get_tasks` checks the state of tasks that have been synced so far. No params required.
-
-### Retry Strategy
-Unlike the Loop Polling task, the Trigger task works by being triggered by a message that is delivered, so reprocessing is not easy if data synchronization fails.
-Therefore, when the Trigger task fails to process, it stores the task in the retry queue and retries for a retry-count.
-If it doesn't succeed until the retry-count goes to 0, it sends a 'curl' command to Slack that can be retried.
-In this case, retry-endpoint, which is an endpoint for retry requests, can be set in config.toml.
+`get_sync` checks the state of tasks that have been synced so far. It also needs `sync_type` for params.
 
 ### Polling Interval
 The Loop Polling task can adjust the synchronization speed by adjusting the `poll-interval` value in `config.toml`.
 ```toml
-[l2txbatch]
+[block]
 poll-interval=1000
-```
-
-### Retry Count
-The Trigger task can adjust the number of retries by adjusting the `retry-count` value in `config.toml`.
-```toml
-[l1txlog]
-retry-count=3
-retry-endpoint="http://0.0.0.0:9999"
 ```
 
 ## PostgreSQL Plugin
@@ -82,41 +70,40 @@ The types allowed in JSON Schema are `string`, `integer`, `number`, `boolean`, `
 The description means the field value in the data, and it can be viewed as a key that matches the field value to the column of the DB table.
 For example, in the `l2_tx_block` that gets the tx data of L2 geth, there is a field called ‘from’ in tx. However, when saving to DB, it is saved as `from_address`, so it has the form below.
 ```json
- "optimism_block_txs": {
+  "cosmos_block": {
     "attributes": {
-      ...
-      "from_address": {
-        "type": [ "string", "null" ],
-        "description": "from"
+      "hash": {
+        "type":  [ "string", "null" ],
+        "description": "block_id.hash"
       },
       ...
+      "num_txs": {
+        "type": "integer",
+        "description": "num_txs"
+      }
     },
-    "indexes": ...,
-    "uniques": ...
-  }
+    "indexes": [ [ "hash" ], [ "height" ] ],
+    "uniques": [ [ "hash" ], [ "height" ] ]
+  },
 ```
 `indexes` is a field to add an index to the column. It has an array in an array, and the sub-array consists of column names. This allows you to create multi-column indexes.
 `uniques` is a field for adding a unique constraint to a column. It has the same format as `indexes`, and you can also add multi-column unique conditions.
-```json
-{
-  "ethereum_tx_logs": {
-    "attributes": {
-      ...
-    },
-    "indexes": [ [ "address" ], [ "block_number" ], [ "tx_hash" ], [ "block_hash" ], [ "queue_index" ] ],
-    "uniques": [ [ "tx_hash", "log_index" ] ]
-  }
-}
-```
 
 ### Loading Schema
 postgres plugin executes `load_schema` method to load schema data according to the predefined schema json.
-It reads the `optimism.json` and `ethereum.json` files in the `schema` path, and if necessary, if you add the schema file to the `schema_files` array, it can also be read when the plugin starts.
+It automatically reads in schema path.
 ```rust
 fn load_schema() -> Result<HashMap<String, PostgresSchema>, ExpectedError> {
-    let schema_files = vec![String::from("schema/optimism.json"), String::from("schema/ethereum.json")];
-    ...
-    Ok(schema_map)
+  let schema_dir = fs::read_dir("schema/").unwrap();
+  let mut schema_files: Vec<String> = Vec::new();
+  for file in schema_dir {
+    let file_name = file.unwrap().path().display().to_string();
+    if file_name.ends_with(".json") {
+      log::debug!("add schema! schema_name={}", file_name);
+      schema_files.push(file_name);
+    }
+  }
+  ...
 }
 ```
 
