@@ -1,6 +1,6 @@
 # Clairvoyance
 
-Clairvoyance is a collection of tools for building Cosmos blockchain explorer.
+Clairvoyance is a collection of tools for building Cosmos appchain explorer.
 
 ## License
 
