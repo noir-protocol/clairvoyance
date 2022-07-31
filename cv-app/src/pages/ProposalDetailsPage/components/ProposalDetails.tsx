@@ -1,13 +1,11 @@
 import React, {useEffect} from 'react';
-import {useParams, useLocation} from 'react-router-dom';
+import {useParams} from 'react-router-dom';
 import PropTypes from 'prop-types';
 import {useRecoilState} from 'recoil';
 import {
   Box,
-  Divider,
   Tab,
   Tabs,
-  Typography,
 } from '@mui/material';
 import InfoCard from '../../../components/InfoCard';
 import Overview from './Overview';
@@ -73,7 +71,7 @@ function ProposalDetails(props: any) {
   };
 
   return (
-    <InfoCard title='Proposal Detail'  subtitle={`#${id}`} contentProps={{m:0}}>
+    <InfoCard title='Proposal Details'  subtitle={`#${id}`} contentProps={{m:0}}>
       <Box sx={cardHeaderC1}>
         <Tabs value={opts.index} onChange={handleChange} aria-label='proposal-details-tabs'>
           <Tab label='Overview' {...a11yProps(0)} />

@@ -67,7 +67,7 @@ function ValidatorDetails(props: any) {
   };
 
   return (
-    <InfoCard title='Validator Detail' subtitle={`#${address}`} contentProps={{m: 0}}>
+    <InfoCard title='Validator Details' subtitle={`#${address}`} contentProps={{m: 0}}>
       <Box sx={cardHeaderC1}>
         <Tabs value={opts.index} onChange={handleChange} aria-label='validator-details-tabs'>
           <Tab label='Overview' {...a11yProps(0)} />

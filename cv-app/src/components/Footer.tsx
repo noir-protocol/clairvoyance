@@ -117,7 +117,7 @@ export default function Footer() {
           <Box sx={inner}>
             <Box sx={innerItemFirst}>
               <Box sx={logoBox}>
-                <Logo /><Typography sx={{paddingLeft: '10px'}}>Powered by Turnpike</Typography>
+                <Logo /><Typography sx={{paddingLeft: '10px'}}>Powered by Haderech</Typography>
               </Box>
               <Typography sx={logoBoxText}>Clairvoyance is a set of tools to build a blockchain explorer for any protocols.</Typography>
             </Box>
