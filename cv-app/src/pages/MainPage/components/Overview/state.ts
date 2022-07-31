@@ -1,5 +1,5 @@
 import {selector} from 'recoil';
-import {api, nodeApi} from '../../../../utils/urlResolver';
+import {api} from '../../../../utils/urlResolver';
 
 interface Block {
   app_hash: string;
